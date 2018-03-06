@@ -1,0 +1,24 @@
+{
+  "name": "jausions/php-typed-collections",
+  "description": "Collections and arrays with type constraint.",
+  "type": "library",
+  "minimum-stability": "beta",
+  "license": "MIT license",
+  "authors": [
+    {
+      "name": "Philippe Jausions",
+      "email": "Philippe.Jausions@11abacus.com"
+    }
+  ],
+  "require": {
+    "doctrine/collections": "v1.5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "7.0.2",
+    "fzaninotto/faker": "v1.7.1",
+    "phpunit/php-code-coverage": "6.0.1"
+  },
+  "autoload": {
+    "psr-4": {"Abacus11\\": "src/"}
+  }
+}
