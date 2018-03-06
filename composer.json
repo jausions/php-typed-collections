@@ -3,7 +3,7 @@
   "description": "Collections and arrays with type constraint.",
   "type": "library",
   "minimum-stability": "beta",
-  "license": "MIT license",
+  "license": "MIT",
   "authors": [
     {
       "name": "Philippe Jausions",
