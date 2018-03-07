@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class Resources extends ArrayOf
+class Resources extends ArrayCollectionOf
 {
     /**
      * Collection of resources

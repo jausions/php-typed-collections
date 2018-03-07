@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class Callables extends ArrayOf
+class Callables extends ArrayCollectionOf
 {
     /**
      * Collection of callables

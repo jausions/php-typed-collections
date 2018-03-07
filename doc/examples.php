@@ -1,7 +1,7 @@
 <?php
 
 require '../vendor/autoload.php';
-use Abacus11\Collections\ArrayOf;
+use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
 
 ## Type Defined by Initial Value

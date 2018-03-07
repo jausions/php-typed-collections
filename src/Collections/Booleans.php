@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class Booleans extends ArrayOf
+class Booleans extends ArrayCollectionOf
 {
     /**
      * Collection of booleans

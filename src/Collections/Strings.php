@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class Strings extends ArrayOf
+class Strings extends ArrayCollectionOf
 {
     /**
      * Collection of strings

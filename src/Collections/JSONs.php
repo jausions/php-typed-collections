@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class JSONs extends ArrayOf
+class JSONs extends ArrayCollectionOf
 {
     /**
      * Collection of JSON strings

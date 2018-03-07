@@ -28,7 +28,7 @@ the elements that come after it.
 
 ```php
 <?php
-use Abacus11\Collections\ArrayOf;
+use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
 $int_array = new ArrayOf([1, 2]);      // Okay
 $int_array = new ArrayOf([1, '2']);    // Not okay - throws \TypeError
@@ -41,7 +41,7 @@ The element validation is done against the type of a sample value.
 
 ```php
 <?php
-use Abacus11\Collections\ArrayOf;
+use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
 $sample = 1;
 $int_array = (new ArrayOf())->setElementTypeLike($sample);
@@ -64,7 +64,7 @@ The elements added to the collection can be checked with a closure:
 
 ```php
 <?php
-use Abacus11\Collections\ArrayOf;
+use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
 // Use the setElementType() method
 
@@ -101,7 +101,7 @@ Objects added to the collection can be checked against a class name:
 ```php
 <?php
 
-use Abacus11\Collections\ArrayOf;
+use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
 class A {}
 
@@ -143,7 +143,7 @@ accepts the following values:
 
 ```php
 <?php
-use Abacus11\Collections\ArrayOf;
+use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
 // Use the setElementType() method
 
@@ -188,7 +188,7 @@ interface.
 
 ```php
 <?php
-use Abacus11\Collections\ArrayOf;
+use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
 class Vehicle
 {

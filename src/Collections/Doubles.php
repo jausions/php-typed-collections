@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class Doubles extends ArrayOf
+class Doubles extends ArrayCollectionOf
 {
     /**
      * Collection of doubles

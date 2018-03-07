@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class Objects extends ArrayOf
+class Objects extends ArrayCollectionOf
 {
     /**
      * Collection of objects

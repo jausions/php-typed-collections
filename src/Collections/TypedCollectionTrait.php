@@ -3,7 +3,7 @@
 namespace Abacus11\Collections;
 
 /**
- * Trait to implement constraints on elements of a collection
+ * Trait to implement the TypedCollection interface
  *
  * @author Philippe Jausions <Philippe.Jausions@11abacus.com>
  * @see \Doctrine\Common\Collections\Collection
@@ -44,43 +44,6 @@ trait TypedCollectionTrait
     }
 
     /**
-     * Adds an element at the end of the collection.
-     *
-     * @param mixed $element The element to add.
-     *
-     * @return bool Always TRUE.
-     *
-     * @throws \TypeError when the value doesnt match the criteria
-     * @throws \AssertionError when the criteria is not set
-     */
-    public function add($element)
-    {
-        if (!$this->isElementType($element)) {
-            throw new \TypeError('The value does not comply with the criteria for the collection.');
-        }
-        return parent::add($element);
-    }
-
-    /**
-     * Sets an element in the collection at the specified key/index.
-     *
-     * @param string|int $key The key/index of the element to set.
-     * @param mixed $value The element to set.
-     *
-     * @return void
-     *
-     * @throws \TypeError when the value doesnt match the criteria
-     * @throws \AssertionError when the criteria is not set
-     */
-    public function set($key, $value)
-    {
-        if (!$this->isElementType($value)) {
-            throw new \TypeError('The value does not comply with the criteria for the collection.');
-        }
-        parent::set($key, $value);
-    }
-
-    /**
      * Defines the criteria for adding elements to the collection
      *
      * If a closure is passed, it needs to expect one argument and must
@@ -106,17 +69,17 @@ trait TypedCollectionTrait
      * @return $this
      *
      * @throws \TypeError
-     * @throws \Exception
+     * @throws \RuntimeException
      *
      * @see TypedCollection::setElementTypeLike()
      */
     public function setElementType($criteria)
     {
         if ($this->isElementTypeSet()) {
-            throw new \Exception('The criteria for the collection cannot be changed');
+            throw new \RuntimeException('The criteria for the collection cannot be changed');
         }
-        if (!$this->isEmpty()) {
-            throw new \Exception('The criteria cannot be set for a non-empty collection');
+        if (($this instanceof \Countable) && count($this) > 0) {
+            throw new \RuntimeException('The criteria cannot be set for a non-empty collection');
         }
 
         if (is_string($criteria)) {
