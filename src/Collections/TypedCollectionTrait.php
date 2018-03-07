@@ -26,10 +26,8 @@ trait TypedCollectionTrait
      */
     public function isElementType($element)
     {
-        // If assert is turned off in your php.ini you may receive
-        // the error: "Function name must be a string" if the collection
-        // type wasn't set before trying to add elements.
-        assert(isset($this->element_type_checker), 'The criteria for the collection is not defined');
+        // You may receive the error: "Function name must be a string"
+        // if the collection type wasn't set before trying to add elements.
         return ($this->element_type_checker)($element);
     }
 

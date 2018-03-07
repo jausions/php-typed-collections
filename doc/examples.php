@@ -1,21 +1,36 @@
 <?php
 
 require '../vendor/autoload.php';
-use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
 
+use Abacus11\Collections\{
+    TypedCollection,
+    TypedArrayAccessTrait,
+    TypedCollectionTrait
+};
 
-## Type Defined by Initial Value
+## Very simplistic implementation of the ArrayAccess interface
 
-$int_array = new ArrayOf([1, 2]);
-try {
-    $int_array = new ArrayOf([1, '2']);
-} catch (\TypeError $e) {
-    echo ' 1. '.$e->getMessage().PHP_EOL;
-}
-try {
-    $int_array = new ArrayOf([null, 1]);
-} catch (\InvalidArgumentException $e) {
-    echo ' 2. '.$e->getMessage().PHP_EOL;
+class ArrayOf implements \ArrayAccess, TypedCollection
+{
+    use TypedArrayAccessTrait,
+        TypedCollectionTrait;
+
+    protected $elements = [];
+
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->elements);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->elements[$offset];
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->elements[$offset]);
+    }
 }
 
 
@@ -137,11 +152,6 @@ try {
 } catch (\TypeError $e) {
     echo '10. '.$e->getMessage().PHP_EOL;
 }
-
-
-## Built-In Collections
-
-$integers = new \Abacus11\Collections\Integers([1, 2, 3, 0, -1]);
 
 
 ## Custom Type Collections

@@ -1,6 +1,5 @@
 <?php
 
-use Abacus11\Collections\ArrayCollectionOf;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -248,7 +247,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::isElementType()
      */
     public function testValueIsValidForSameTypeCollection($type, $value): void
     {
@@ -262,7 +260,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::isElementType()
      */
     public function testValueIsInvalidForMismatchedTypeCollection($type, $type_element, $value): void
     {
@@ -276,7 +273,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::add()
      */
     public function testCanAddValueToSameTypeCollection($type, $value): void
     {
@@ -290,7 +286,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider validJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::add()
      */
     public function testCanAddValidJSONToJSONCollection($value): void
     {
@@ -304,7 +299,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider invalidJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::add()
      */
     public function testCannotAddInvalidJSONToJSONCollection($value): void
     {
@@ -321,7 +315,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::add()
      */
     public function testCannotAddWrongBasicTypeToCollection($type_collection, $type_element, $element): void
     {
@@ -349,7 +342,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::set()
      */
     public function testCanAddValueWithKeyToSameTypeCollection($type, $value): void
     {
@@ -363,7 +355,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider validJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::set()
      */
     public function testCanAddValidJSONWithKeyToJSONCollection($value): void
     {
@@ -377,7 +368,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider invalidJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::set()
      */
     public function testCannotAddInvalidJSONWithKeyToJSONCollection($value): void
     {
@@ -394,7 +384,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::set()
      */
     public function testCannotAddWrongBasicTypeWithKeyToCollection($type_collection, $type_element, $element): void
     {
@@ -407,7 +396,6 @@ class ArrayCollectionOfTest extends TestCase
 
     /**
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::set()
      */
     public function testCannotAddElementWithKeyToNonConfiguredCollection(): void
     {
@@ -419,7 +407,6 @@ class ArrayCollectionOfTest extends TestCase
 
     /**
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::setElementType()
      */
     public function testCannotChangeTheTypeOfNonEmptyCollection(): void
     {
@@ -433,7 +420,6 @@ class ArrayCollectionOfTest extends TestCase
 
     /**
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::setElementType()
      */
     public function testCannotChangeTheTypeOfTypedCollection(): void
     {
@@ -446,7 +432,6 @@ class ArrayCollectionOfTest extends TestCase
 
     /**
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::setElementTypeLike()
      */
     public function testCannotUseNullAsSampleType(): void
     {
@@ -461,7 +446,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider sampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::setElementTypeLike()
      */
     public function testCanAddValidValueToLikeElementTypeCollection($type, $sample, $value): void
     {
@@ -479,7 +463,6 @@ class ArrayCollectionOfTest extends TestCase
      *
      * @dataProvider mismatchedSampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::setElementTypeLike()
      */
     public function testCannotAddInvalidValueToLikeElementTypeCollection($sample_type, $sample, $value_type, $value): void
     {

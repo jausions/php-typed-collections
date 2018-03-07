@@ -11,9 +11,10 @@
     }
   ],
   "require": {
-    "doctrine/collections": "^v1.5.0"
+    "php": "^7.1"
   },
   "require-dev": {
+    "doctrine/collections": "^v1.5.0",
     "phpunit/phpunit": "^7.0.2",
     "fzaninotto/faker": "^v1.7.1"
   },
