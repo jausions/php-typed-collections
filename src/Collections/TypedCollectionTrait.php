@@ -76,9 +76,6 @@ trait TypedCollectionTrait
         if ($this->isElementTypeSet()) {
             throw new \RuntimeException('The criteria for the collection cannot be changed');
         }
-        if (($this instanceof \Countable) && count($this) > 0) {
-            throw new \RuntimeException('The criteria cannot be set for a non-empty collection');
-        }
 
         if (is_string($criteria)) {
             // We are a bit more tolerant with aliases
