@@ -17,7 +17,6 @@ class Booleans extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('boolean');
-        parent::__construct($elements);
+        parent::__construct('boolean', $elements);
     }
 }

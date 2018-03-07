@@ -14,6 +14,13 @@ interface TypedCollection
     public function isElementType($element);
 
     /**
+     * Returns whether the collection has a type
+     *
+     * @return boolean
+     */
+    public function isElementTypeSet();
+
+    /**
      * Defines the criteria for adding elements to the collection
      *
      * If a closure is passed, it needs to expect one argument and must

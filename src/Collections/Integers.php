@@ -17,7 +17,6 @@ class Integers extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('integer');
-        parent::__construct($elements);
+        parent::__construct('integer', $elements);
     }
 }

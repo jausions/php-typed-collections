@@ -1,31 +1,52 @@
 <?php
 
 require '../vendor/autoload.php';
-
 use Abacus11\Collections\ArrayOf;
 
-$int_array = (new ArrayOf())->setElementType('integer');
 
-$int_array[] = 1;     // Okay
+## Type Defined by Initial Value
+
+$int_array = new ArrayOf([1, 2]);
 try {
-    $int_array[] = '1';   // Not okay - throws \TypeError exception
+    $int_array = new ArrayOf([1, '2']);
 } catch (\TypeError $e) {
-    echo '1. '.$e->getMessage().PHP_EOL;
+    echo ' 1. '.$e->getMessage().PHP_EOL;
+}
+try {
+    $int_array = new ArrayOf([null, 1]);
+} catch (\InvalidArgumentException $e) {
+    echo ' 2. '.$e->getMessage().PHP_EOL;
 }
 
-## Defining the Type by Example
+
+## Type Defined by a Sample Value
 
 $sample = 1;
 $int_array = (new ArrayOf())->setElementTypeLike($sample);
 
-$int_array[] = 2;     // Okay
+$int_array[] = 2;
 try {
-    $int_array[] = true;   // Not okay - throws \TypeError exception
+    $int_array[] = true;
 } catch (\TypeError $e) {
-    echo '2. '.$e->getMessage().PHP_EOL;
+    echo ' 3. '.$e->getMessage().PHP_EOL;
 }
 
-## Using a Closure
+class SomeClass {}
+
+$sample = new SomeClass();
+$some = (new ArrayOf())->setElementTypeLike($sample);
+
+$some[] = new SomeClass();
+try {
+    $some[] = new stdClass();
+} catch (\TypeError $e) {
+    echo ' 4. '.$e->getMessage().PHP_EOL;
+}
+
+
+## Type Defined by a Closure
+
+// Use setElementType() method
 
 $positive_int = (new ArrayOf())->setElementType(function ($value) {
     if (!is_integer($value)) {
@@ -34,15 +55,34 @@ $positive_int = (new ArrayOf())->setElementType(function ($value) {
     return ($value >= 0);
 });
 
-$positive_int['apples'] = 0;      // Okay
-$positive_int['oranges'] = 10;    // Okay
+$positive_int['apples'] = 0;
+$positive_int['oranges'] = 10;
 try {
-    $positive_int['bananas'] = -5;    // Not okay - throws \TypeError exception
+    $positive_int['bananas'] = -5;
 } catch (\TypeError $e) {
-    echo '3. '.$e->getMessage().PHP_EOL;
+    echo ' 5. '.$e->getMessage().PHP_EOL;
 }
 
-## Using a Class Name
+// Or directly in the constructor
+
+$negative_int = new ArrayOf(
+    function ($value) {
+        if (!is_integer($value)) {
+            return false;
+        }
+        return ($value <= 0);
+    }
+);
+
+$negative_int[] = -50;
+try {
+    $negative_int[] = 5;
+} catch (\TypeError $e) {
+    echo ' 6. '.$e->getMessage().PHP_EOL;
+}
+
+
+## Type Defined by a Class Name
 
 class A {}
 
@@ -50,33 +90,61 @@ class B {}
 
 class AA extends A {}
 
+// Use the setElementType() method
+
 $some_a = (new ArrayOf())->setElementType(A::class);
 
-$some_a[] = new A();    // Okay
-$some_a[] = new AA();   // Okay
-
+$some_a[] = new A();
+$some_a[] = new AA();
 try {
-    $some_a[] = new B();    // Not okay - throws \TypeError exception
+    $some_a[] = new B();
 } catch (\TypeError $e) {
-    echo '4. '.$e->getMessage().PHP_EOL;
+    echo ' 7. '.$e->getMessage().PHP_EOL;
 }
 
-## Validation With Initial Value
+// Or directly in the constructor
 
-$int_array = new ArrayOf([1, 2]);     // Okay
+$some_b = new ArrayOf(B::class);
+
+$some_b[] = new B();
 try {
-    $int_array = new ArrayOf([1, '2']);   // Not okay - throws \TypeError
+    $some_b[] = new A();
 } catch (\TypeError $e) {
-    echo '5. '.$e->getMessage().PHP_EOL;
+    echo ' 8. '.$e->getMessage().PHP_EOL;
 }
 
+
+## Built-In Library Types
+
+// Use the setElementType() method
+
+$int_array = (new ArrayOf())->setElementType('integer');
+
+$int_array[] = 1;
 try {
-    $int_array = new ArrayOf([null, 1]);   // Not okay - throws \TypeError
-} catch (\InvalidArgumentException $e) {
-    echo '6. '.$e->getMessage().PHP_EOL;
+    $int_array[] = '1';
+} catch (\TypeError $e) {
+    echo ' 9. '.$e->getMessage().PHP_EOL;
 }
 
-## Example
+// Or directly in the constructor
+
+$int_array = new ArrayOf('integer');
+
+$int_array[] = 20;
+try {
+    $int_array[] = true;
+} catch (\TypeError $e) {
+    echo '10. '.$e->getMessage().PHP_EOL;
+}
+
+
+## Built-In Collections
+
+$integers = new \Abacus11\Collections\Integers([1, 2, 3, 0, -1]);
+
+
+## Custom Type Collections
 
 class Vehicle
 {
@@ -98,11 +166,13 @@ class Submarine extends Vehicle
 class Cars extends ArrayOf
 {
     /**
-     * @param Car[] $elements
+     * @param Car[] $cars
      */
-    public function __construct(array $elements = []) {
-        $this->setElementType(Car::class);
-        parent::__construct($elements);
+    public function __construct(array $cars = []) {
+        parent::__construct(Car::class, $cars);
+        // - or -
+        //$this->setElementType(Car::class);
+        //parent::__construct($cars);
     }
 }
 
@@ -115,7 +185,7 @@ class Parking
 
     public function __construct()
     {
-        $this->lot = new Cars();
+        $this->lot = new Cars([]);
     }
 
     public function enter(Vehicle $car)
@@ -144,9 +214,10 @@ $my_sub = new Submarine();
 $my_sub->name = 'Nautilus';
 
 $parking = new Parking();
-$parking->enter($my_car);   // Okay
+$parking->enter($my_car);
 try {
-    $parking->enter($my_sub);   // Not okay - throws \TypeError exception
+    $parking->enter($my_sub);
 } catch (\TypeError $e) {
-    echo '7. '.$e->getMessage().PHP_EOL;
+    echo '11. '.$e->getMessage().PHP_EOL;
 }
+

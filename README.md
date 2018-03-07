@@ -46,16 +46,16 @@ use Abacus11\Collections\ArrayOf;
 $sample = 1;
 $int_array = (new ArrayOf())->setElementTypeLike($sample);
 
-$int_array[] = 2;                   // Okay
-$int_array[] = true;                // Not okay - throws \TypeError exception
+$int_array[] = 2;              // Okay
+$int_array[] = true;           // Not okay - throws \TypeError exception
 
 class SomeClass {}
 
 $sample = new SomeClass();
-$int_array = (new ArrayOf())->setElementTypeLike($sample);
+$some = (new ArrayOf())->setElementTypeLike($sample);
 
-$int_array[] = new SomeClass();     // Okay
-$int_array[] = new stdClass();      // Not okay - throws \TypeError exception
+$some[] = new SomeClass();     // Okay
+$some[] = new stdClass();      // Not okay - throws \TypeError exception
 ```
 
 ## Type Defined by a Closure
@@ -65,6 +65,8 @@ The elements added to the collection can be checked with a closure:
 ```php
 <?php
 use Abacus11\Collections\ArrayOf;
+
+// Use the setElementType() method
 
 $positive_int = (new ArrayOf())->setElementType(function ($value) {
     if (!is_integer($value)) {
@@ -76,6 +78,20 @@ $positive_int = (new ArrayOf())->setElementType(function ($value) {
 $positive_int['apples'] = 0;      // Okay
 $positive_int['oranges'] = 10;    // Okay
 $positive_int['bananas'] = -5;    // Not okay - throws \TypeError exception
+
+// Or directly in the constructor
+
+$negative_int = new ArrayOf(
+    function ($value) {
+        if (!is_integer($value)) {
+            return false;
+        }
+        return ($value <= 0);
+    }
+);
+
+$negative_int[] = -50;            // Okay
+$negative_int[] = 5;              // Not okay - throws \TypeError exception
 ```
 
 ## Type Defined by a Class Name
@@ -93,11 +109,20 @@ class B {}
 
 class AA extends A {}
 
+// Use the setElementType() method
+
 $some_a = (new ArrayOf())->setElementType(A::class);
 
 $some_a[] = new A();    // Okay
 $some_a[] = new AA();   // Okay
 $some_a[] = new B();    // Not okay - throws \TypeError exception
+
+// Or directly in the constructor
+
+$some_b = new ArrayOf(B::class);
+
+$some_b[] = new B();    // Okay
+$some_b[] = new A();    // Not okay - throws \TypeError exception
 ```
 
 ## Built-In Library Types
@@ -120,10 +145,19 @@ accepts the following values:
 <?php
 use Abacus11\Collections\ArrayOf;
 
+// Use the setElementType() method
+
 $int_array = (new ArrayOf())->setElementType('integer');
 
-$int_array[] = 1;     // Okay
-$int_array[] = '1';   // Not okay - throws \TypeError exception
+$int_array[] = 1;      // Okay
+$int_array[] = '1';    // Not okay - throws \TypeError exception
+
+// Or directly in the constructor
+
+$int_array = new ArrayOf('integer');
+
+$int_array[] = 20;     // Okay
+$int_array[] = true;   // Not okay - throws \TypeError exception
 ```
 
 ## Built-In Collections
@@ -176,11 +210,13 @@ class Submarine extends Vehicle
 class Cars extends ArrayOf
 {
     /**
-     * @param Car[] $elements
+     * @param Car[] $cars
      */
-    public function __construct(array $elements = []) {
-        $this->setElementType(Car::class);
-        parent::__construct($elements);
+    public function __construct(array $cars = []) {
+        parent::__construct(Car::class, $cars);
+        // - or -
+        //$this->setElementType(Car::class);
+        //parent::__construct($cars);
     }
 }
 

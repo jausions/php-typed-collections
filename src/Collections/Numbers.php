@@ -17,7 +17,6 @@ class Numbers extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('number');
-        parent::__construct($elements);
+        parent::__construct('number', $elements);
     }
 }

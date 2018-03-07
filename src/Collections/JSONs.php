@@ -17,7 +17,6 @@ class JSONs extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('json');
-        parent::__construct($elements);
+        parent::__construct('json', $elements);
     }
 }

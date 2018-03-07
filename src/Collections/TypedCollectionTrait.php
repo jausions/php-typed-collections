@@ -34,6 +34,16 @@ trait TypedCollectionTrait
     }
 
     /**
+     * Returns whether the collection has a type
+     *
+     * @return boolean
+     */
+    public function isElementTypeSet()
+    {
+        return isset($this->element_type_checker);
+    }
+
+    /**
      * Adds an element at the end of the collection.
      *
      * @param mixed $element The element to add.
@@ -102,7 +112,7 @@ trait TypedCollectionTrait
      */
     public function setElementType($criteria)
     {
-        if (isset($this->element_type_checker)) {
+        if ($this->isElementTypeSet()) {
             throw new \Exception('The criteria for the collection cannot be changed');
         }
         if (!$this->isEmpty()) {

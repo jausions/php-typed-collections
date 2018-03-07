@@ -17,7 +17,6 @@ class Arrays extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('array');
-        parent::__construct($elements);
+        parent::__construct('array', $elements);
     }
 }

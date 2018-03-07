@@ -17,7 +17,6 @@ class Doubles extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('double');
-        parent::__construct($elements);
+        parent::__construct('double', $elements);
     }
 }

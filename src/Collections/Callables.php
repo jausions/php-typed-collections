@@ -17,7 +17,6 @@ class Callables extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('callable');
-        parent::__construct($elements);
+        parent::__construct('callable', $elements);
     }
 }

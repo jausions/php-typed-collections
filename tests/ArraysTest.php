@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class ArraysTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\Arrays::__construct()
      */
     public function testArrayCollectionAcceptsOnlyArrays()
     {

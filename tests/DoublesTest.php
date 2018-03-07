@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class DoublesTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\Doubles::__construct()
      */
     public function testDoubleCollectionAcceptsOnlyDoubles()
     {

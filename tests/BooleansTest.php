@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class BooleansTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\Booleans::__construct()
      */
     public function testBooleanCollectionAcceptsOnlyBooleans()
     {

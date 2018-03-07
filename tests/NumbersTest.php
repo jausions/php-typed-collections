@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class NumbersTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\Numbers::__construct()
      */
     public function testNumberCollectionAcceptsOnlyNumbers()
     {

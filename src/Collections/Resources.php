@@ -17,7 +17,6 @@ class Resources extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('resource');
-        parent::__construct($elements);
+        parent::__construct('resource', $elements);
     }
 }

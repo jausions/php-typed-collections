@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class CollectionOfObjectsTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\Objects::__construct()
      */
     public function testObjectCollectionAcceptsOnlyObjects()
     {

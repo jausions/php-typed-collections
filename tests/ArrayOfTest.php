@@ -246,10 +246,6 @@ class ArrayOfTest extends TestCase
      * @param string $type
      * @param mixed $value
      *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
      * @covers \Abacus11\Collections\ArrayOf::isElementType()
@@ -263,10 +259,6 @@ class ArrayOfTest extends TestCase
     /**
      * @param string $type
      * @param mixed $value
-     *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
@@ -282,10 +274,6 @@ class ArrayOfTest extends TestCase
      * @param string $type
      * @param mixed $value
      *
-     * @throws Exception
-     * @throws TypeError
-     * @throws AssertionError
-     *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
      * @covers \Abacus11\Collections\ArrayOf::add()
@@ -300,10 +288,6 @@ class ArrayOfTest extends TestCase
     /**
      * @param mixed $value
      *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @dataProvider validJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
      * @covers \Abacus11\Collections\ArrayOf::add()
@@ -317,10 +301,6 @@ class ArrayOfTest extends TestCase
 
     /**
      * @param mixed $value
-     *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
      *
      * @dataProvider invalidJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
@@ -339,10 +319,6 @@ class ArrayOfTest extends TestCase
      * @param $type_element
      * @param mixed $element
      *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
      * @covers \Abacus11\Collections\ArrayOf::add()
@@ -356,10 +332,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
      * @covers \Abacus11\Collections\ArrayOf::add()
      */
@@ -375,10 +347,6 @@ class ArrayOfTest extends TestCase
      * @param string $type
      * @param mixed $value
      *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
      * @covers \Abacus11\Collections\ArrayOf::set()
@@ -393,10 +361,6 @@ class ArrayOfTest extends TestCase
     /**
      * @param mixed $value
      *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @dataProvider validJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
      * @covers \Abacus11\Collections\ArrayOf::set()
@@ -410,10 +374,6 @@ class ArrayOfTest extends TestCase
 
     /**
      * @param mixed $value
-     *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
      *
      * @dataProvider invalidJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
@@ -432,10 +392,6 @@ class ArrayOfTest extends TestCase
      * @param $type_element
      * @param mixed $element
      *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
      * @covers \Abacus11\Collections\ArrayOf::set()
@@ -450,10 +406,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
      * @covers \Abacus11\Collections\ArrayOf::set()
      */
@@ -466,10 +418,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      * @covers \Abacus11\Collections\ArrayOf::setElementType()
      */
@@ -484,10 +432,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      * @covers \Abacus11\Collections\ArrayOf::setElementType()
      */
@@ -501,10 +445,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
      * @covers \Abacus11\Collections\ArrayOf::setElementTypeLike()
      */
@@ -518,10 +458,6 @@ class ArrayOfTest extends TestCase
      * @param string $type
      * @param mixed $sample
      * @param mixed $value
-     *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
      *
      * @dataProvider sampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
@@ -541,10 +477,6 @@ class ArrayOfTest extends TestCase
      * @param string $value_type
      * @param mixed $value
      *
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @dataProvider mismatchedSampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
      * @covers \Abacus11\Collections\ArrayOf::setElementTypeLike()
@@ -558,10 +490,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
     public function testFirstElementBlocksWrongInitialValues()
@@ -571,10 +499,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
     public function testFirstElementSetsTypeOfCollection()
@@ -586,10 +510,6 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
     public function testFirstElementLetsValidInitialValues()
@@ -599,135 +519,29 @@ class ArrayOfTest extends TestCase
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     *
      * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
-    public function testCannotInitializeCollectionWithNull()
+    public function testCannotInitializeCollectionWithNullValue()
     {
         $this->expectException(\InvalidArgumentException::class);
         new ArrayOf([null, 'abc']);
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
-    public function testArrayCollectionAcceptsOnlyArrays()
+    public function testCannotInitializeCollectionWithNullType()
     {
-        $collection = new \Abacus11\Collections\Arrays([[], [1, 2, 3], ['a', 'b', 'c']]);
-        $this->expectException(\TypeError::class);
-        $collection[] = false;
+        $this->expectException(\InvalidArgumentException::class);
+        new ArrayOf(null, ['abc', 'xyz']);
     }
 
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
-    public function testBooleanCollectionAcceptsOnlyBooleans()
+    public function testCannotInitializeCollectionWithNullSingleArgument()
     {
-        $collection = new \Abacus11\Collections\Booleans([false, true, false]);
-        $this->expectException(\TypeError::class);
-        $collection[1] = 'abc';
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testCallableCollectionAcceptsOnlyCallables()
-    {
-        $collection = new \Abacus11\Collections\Callables([function(){}, [$this, __FUNCTION__], 'ucfirst']);
-        $this->expectException(\TypeError::class);
-        $collection['abc'] = 3.1415;
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testDoubleCollectionAcceptsOnlyDoubles()
-    {
-        $collection = new \Abacus11\Collections\Doubles([1.1, 2.0, -3.45]);
-        $this->expectException(\TypeError::class);
-        $collection['xyz'] = 3;
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testIntegerCollectionAcceptsOnlyIntegers()
-    {
-        $collection = new \Abacus11\Collections\Integers([1, 0, 2]);
-        $this->expectException(\TypeError::class);
-        $collection[2] = 'Hello world!';
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testJSONCollectionAcceptsOnlyJSON()
-    {
-        $collection = new \Abacus11\Collections\JSONs(['null', '{"key":"value"}']);
-        $this->expectException(\TypeError::class);
-        $collection['other'] = function() {};
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testNumberCollectionAcceptsOnlyNumbers()
-    {
-        $collection = new \Abacus11\Collections\Numbers(['123', -876543, 0, 9.876, '-4.5']);
-        $this->expectException(\TypeError::class);
-        $collection[] = new stdClass();
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testObjectCollectionAcceptsOnlyObjects()
-    {
-        $collection = new \Abacus11\Collections\Objects([new stdClass(), new class {}, function() {}, $this]);
-        $this->expectException(\TypeError::class);
-        $collection[] = 'text';
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testResourceCollectionAcceptsOnlyResources()
-    {
-        $collection = new \Abacus11\Collections\Resources([fopen(__FILE__, 'r'), opendir(__DIR__)]);
-        $this->expectException(\TypeError::class);
-        $collection[] = 123;
-    }
-
-    /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
-     */
-    public function testStringCollectionAcceptsOnlyStrings()
-    {
-        $collection = new \Abacus11\Collections\Strings(['abc', '']);
-        $this->expectException(\TypeError::class);
-        $collection[] = true;
+        $this->expectException(\InvalidArgumentException::class);
+        new ArrayOf(null);
     }
 }

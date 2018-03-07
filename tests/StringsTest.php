@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class StringsTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\Strings::__construct()
      */
     public function testStringCollectionAcceptsOnlyStrings()
     {

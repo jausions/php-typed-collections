@@ -17,7 +17,6 @@ class Objects extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('object');
-        parent::__construct($elements);
+        parent::__construct('object', $elements);
     }
 }

@@ -17,7 +17,6 @@ class Strings extends ArrayOf
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('string');
-        parent::__construct($elements);
+        parent::__construct('string', $elements);
     }
 }

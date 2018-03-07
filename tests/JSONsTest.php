@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class JSONsTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\JSONs::__construct()
      */
     public function testJSONCollectionAcceptsOnlyJSON()
     {

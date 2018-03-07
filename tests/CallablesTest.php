@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 class CallablesTest extends TestCase
 {
     /**
-     * @throws AssertionError
-     * @throws Exception
-     * @throws TypeError
+     * @covers \Abacus11\Collections\Callables::__construct()
      */
     public function testCallableCollectionAcceptsOnlyCallables()
     {
