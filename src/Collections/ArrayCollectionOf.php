@@ -13,26 +13,26 @@ class ArrayCollectionOf extends ArrayCollection implements TypedCollection
      *
      * Without any arguments:
      * <code>
-     * new ArrayOf();       // Type is undefined
+     * new ArrayCollectionOf();       // Type is undefined
      * </code>
      *
      * With a type:
      * <code>
-     * new ArrayOf('integer');
-     * new ArrayOf('integer', []);
-     * new ArrayOf('integer', [1, 2, 3]);
+     * new ArrayCollectionOf('integer');
+     * new ArrayCollectionOf('integer', []);
+     * new ArrayCollectionOf('integer', [1, 2, 3]);
      * </code>
      *
      * With an initial array:
      * <code>
-     * new ArrayOf([]);     // Type is undefined
-     * new ArrayOf([1, 2, 3]);
+     * new ArrayCollectionOf([]);     // Type is undefined
+     * new ArrayCollectionOf([1, 2, 3]);
      * </code>
      *
      * With a closure:
      * <code>
-     * new ArrayOf(function($i) {return is_integer($i);});
-     * new ArrayOf(function($i) {return is_integer($i);}, [1, 2, 3]);
+     * new ArrayCollectionOf(function($i) {return is_integer($i);});
+     * new ArrayCollectionOf(function($i) {return is_integer($i);}, [1, 2, 3]);
      * </code>
      *
      * @param array|string|\Closure $definition
