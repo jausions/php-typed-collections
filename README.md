@@ -28,11 +28,11 @@ the elements that come after it.
 
 ```php
 <?php
-use Abacus11\Collections\TypedArrayCollection;
+use Abacus11\Collections\ArrayOf;
 
-$int_array = new TypedArrayCollection([1, 2]);      // Okay
-$int_array = new TypedArrayCollection([1, '2']);    // Not okay - throws \TypeError
-$int_array = new TypedArrayCollection([null, 1]);   // Not okay - throws \InvalidArgumentException
+$int_array = new ArrayOf([1, 2]);      // Okay
+$int_array = new ArrayOf([1, '2']);    // Not okay - throws \TypeError
+$int_array = new ArrayOf([null, 1]);   // Not okay - throws \InvalidArgumentException
 ```
 
 ## Type Defined by a Sample Value
@@ -41,10 +41,10 @@ The element validation is done against the type of a sample value.
 
 ```php
 <?php
-use Abacus11\Collections\TypedArrayCollection;
+use Abacus11\Collections\ArrayOf;
 
 $sample = 1;
-$int_array = (new TypedArrayCollection())->setElementTypeLike($sample);
+$int_array = (new ArrayOf())->setElementTypeLike($sample);
 
 $int_array[] = 2;                   // Okay
 $int_array[] = true;                // Not okay - throws \TypeError exception
@@ -52,7 +52,7 @@ $int_array[] = true;                // Not okay - throws \TypeError exception
 class SomeClass {}
 
 $sample = new SomeClass();
-$int_array = (new TypedArrayCollection())->setElementTypeLike($sample);
+$int_array = (new ArrayOf())->setElementTypeLike($sample);
 
 $int_array[] = new SomeClass();     // Okay
 $int_array[] = new stdClass();      // Not okay - throws \TypeError exception
@@ -64,9 +64,9 @@ The elements added to the collection can be checked with a closure:
 
 ```php
 <?php
-use Abacus11\Collections\TypedArrayCollection;
+use Abacus11\Collections\ArrayOf;
 
-$positive_int = (new TypedArrayCollection())->setElementType(function ($value) {
+$positive_int = (new ArrayOf())->setElementType(function ($value) {
     if (!is_integer($value)) {
         return false;
     }
@@ -85,7 +85,7 @@ Objects added to the collection can be checked against a class name:
 ```php
 <?php
 
-use Abacus11\Collections\TypedArrayCollection;
+use Abacus11\Collections\ArrayOf;
 
 class A {}
 
@@ -93,7 +93,7 @@ class B {}
 
 class AA extends A {}
 
-$some_a = (new TypedArrayCollection())->setElementType(A::class);
+$some_a = (new ArrayOf())->setElementType(A::class);
 
 $some_a[] = new A();    // Okay
 $some_a[] = new AA();   // Okay
@@ -118,9 +118,9 @@ accepts the following values:
 
 ```php
 <?php
-use Abacus11\Collections\TypedArrayCollection;
+use Abacus11\Collections\ArrayOf;
 
-$int_array = (new TypedArrayCollection())->setElementType('integer');
+$int_array = (new ArrayOf())->setElementType('integer');
 
 $int_array[] = 1;     // Okay
 $int_array[] = '1';   // Not okay - throws \TypeError exception
@@ -130,23 +130,20 @@ $int_array[] = '1';   // Not okay - throws \TypeError exception
 
 Several typed collections are predefined:
 
-- `CollectionOfArrays`
-- `CollectionOfBooleans`
-- `CollectionOfCallables`
-- `CollectionOfDoubles`
-- `CollectionOfIntegers`
-- `CollectionOfNumbers`
-- `CollectionOfJSONs`
-- `CollectionOfObjects`
-- `CollectionOfResources`
-- `CollectionOfStrings`
+- `\Abacus11\Collections\Arrays`
+- `\Abacus11\Collections\Booleans`
+- `\Abacus11\Collections\Callables`
+- `\Abacus11\Collections\Doubles`
+- `\Abacus11\Collections\Integers`
+- `\Abacus11\Collections\Numbers`
+- `\Abacus11\Collections\JSONs`
+- `\Abacus11\Collections\Objects`
+- `\Abacus11\Collections\Resources`
+- `\Abacus11\Collections\Strings`
 
 ```php
 <?php
-
-use Abacus11\Collections\CollectionOfIntegers;
-
-$integers = new CollectionOfIntegers([1, 2, 3, 0, -1]);
+$integers = new \Abacus11\Collections\Integers([1, 2, 3, 0, -1]);
 ```
 
 ## Custom Type Collections
@@ -157,7 +154,7 @@ interface.
 
 ```php
 <?php
-use Abacus11\Collections\TypedArrayCollection;
+use Abacus11\Collections\ArrayOf;
 
 class Vehicle
 {
@@ -176,7 +173,7 @@ class Submarine extends Vehicle
     public $name;
 }
 
-class CollectionOfCars extends TypedArrayCollection
+class Cars extends ArrayOf
 {
     /**
      * @param Car[] $elements
@@ -190,13 +187,13 @@ class CollectionOfCars extends TypedArrayCollection
 class Parking
 {
     /**
-     * @var CollectionOfCars
+     * @var Cars
      */
     protected $lot;
 
     public function __construct()
     {
-        $this->lot = new CollectionOfCars();
+        $this->lot = new Cars([]);
     }
 
     public function enter(Vehicle $car)
@@ -207,7 +204,7 @@ class Parking
     /**
      * @return Car[] The collection of cars
      */
-    public function getCars(): CollectionOfCars
+    public function getCars(): Cars
     {
         return $this->lot;
     }

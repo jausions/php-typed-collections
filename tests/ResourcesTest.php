@@ -1,9 +1,9 @@
 <?php
 
-use Abacus11\Collections\CollectionOfResources;
+use Abacus11\Collections\Resources;
 use PHPUnit\Framework\TestCase;
 
-class CollectionOfResourcesTest extends TestCase
+class ResourcesTest extends TestCase
 {
     /**
      * @throws AssertionError
@@ -12,7 +12,7 @@ class CollectionOfResourcesTest extends TestCase
      */
     public function testResourceCollectionAcceptsOnlyResources()
     {
-        $collection = new CollectionOfResources([fopen(__FILE__, 'r'), opendir(__DIR__)]);
+        $collection = new Resources([fopen(__FILE__, 'r'), opendir(__DIR__)]);
         $this->expectException(\TypeError::class);
         $collection[] = 123;
     }

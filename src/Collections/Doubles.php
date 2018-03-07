@@ -2,14 +2,14 @@
 
 namespace Abacus11\Collections;
 
-class CollectionOfBooleans extends TypedArrayCollection
+class Doubles extends ArrayOf
 {
     /**
-     * Collection of booleans
+     * Collection of doubles
      *
-     * Each element of the collection is a boolean
+     * Each element of the collection is a double (also known as float in PHP.)
      *
-     * @param boolean[] $elements
+     * @param double[] $elements
      *
      * @throws \AssertionError
      * @throws \Exception
@@ -17,7 +17,7 @@ class CollectionOfBooleans extends TypedArrayCollection
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('boolean');
+        $this->setElementType('double');
         parent::__construct($elements);
     }
 }

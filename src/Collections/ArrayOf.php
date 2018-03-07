@@ -4,7 +4,7 @@ namespace Abacus11\Collections;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-class TypedArrayCollection extends ArrayCollection implements TypedCollection
+class ArrayOf extends ArrayCollection implements TypedCollection
 {
     use TypedCollectionTrait;
 
@@ -19,8 +19,8 @@ class TypedArrayCollection extends ArrayCollection implements TypedCollection
      * @throws \Exception
      * @throws \TypeError
      *
-     * @see TypedArrayCollection::setElementType()
-     * @see TypedArrayCollection::setElementTypeLike()
+     * @see ArrayOf::setElementType()
+     * @see ArrayOf::setElementTypeLike()
      */
     public function __construct(array $elements = [])
     {

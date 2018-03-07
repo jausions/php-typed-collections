@@ -2,7 +2,7 @@
 
 namespace Abacus11\Collections;
 
-class CollectionOfNumbers extends TypedArrayCollection
+class Numbers extends ArrayOf
 {
     /**
      * Collection of numbers

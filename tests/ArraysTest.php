@@ -1,9 +1,9 @@
 <?php
 
-use Abacus11\Collections\CollectionOfArrays;
+use Abacus11\Collections\Arrays;
 use PHPUnit\Framework\TestCase;
 
-class CollectionOfArraysTest extends TestCase
+class ArraysTest extends TestCase
 {
     /**
      * @throws AssertionError
@@ -12,7 +12,7 @@ class CollectionOfArraysTest extends TestCase
      */
     public function testArrayCollectionAcceptsOnlyArrays()
     {
-        $collection = new CollectionOfArrays([[], [1, 2, 3], ['a', 'b', 'c']]);
+        $collection = new Arrays([[], [1, 2, 3], ['a', 'b', 'c']]);
         $this->expectException(\TypeError::class);
         $collection[] = false;
     }

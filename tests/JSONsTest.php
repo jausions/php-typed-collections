@@ -1,9 +1,9 @@
 <?php
 
-use Abacus11\Collections\CollectionOfJSONs;
+use Abacus11\Collections\JSONs;
 use PHPUnit\Framework\TestCase;
 
-class CollectionOfJSONsTest extends TestCase
+class JSONsTest extends TestCase
 {
     /**
      * @throws AssertionError
@@ -12,7 +12,7 @@ class CollectionOfJSONsTest extends TestCase
      */
     public function testJSONCollectionAcceptsOnlyJSON()
     {
-        $collection = new CollectionOfJSONs(['null', '{"key":"value"}']);
+        $collection = new JSONs(['null', '{"key":"value"}']);
         $this->expectException(\TypeError::class);
         $collection['other'] = function() {};
     }

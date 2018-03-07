@@ -1,9 +1,9 @@
 <?php
 
-use Abacus11\Collections\CollectionOfDoubles;
+use Abacus11\Collections\Doubles;
 use PHPUnit\Framework\TestCase;
 
-class CollectionOfDoublesTest extends TestCase
+class DoublesTest extends TestCase
 {
     /**
      * @throws AssertionError
@@ -12,7 +12,7 @@ class CollectionOfDoublesTest extends TestCase
      */
     public function testDoubleCollectionAcceptsOnlyDoubles()
     {
-        $collection = new CollectionOfDoubles([1.1, 2.0, -3.45]);
+        $collection = new Doubles([1.1, 2.0, -3.45]);
         $this->expectException(\TypeError::class);
         $collection['xyz'] = 3;
     }

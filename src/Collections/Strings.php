@@ -2,14 +2,14 @@
 
 namespace Abacus11\Collections;
 
-class CollectionOfIntegers extends TypedArrayCollection
+class Strings extends ArrayOf
 {
     /**
-     * Collection of integers
+     * Collection of strings
      *
-     * Each element of the collection is an integer
+     * Each element of the collection is a string
      *
-     * @param integer[] $elements
+     * @param string[] $elements
      *
      * @throws \AssertionError
      * @throws \Exception
@@ -17,7 +17,7 @@ class CollectionOfIntegers extends TypedArrayCollection
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('integer');
+        $this->setElementType('string');
         parent::__construct($elements);
     }
 }

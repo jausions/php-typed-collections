@@ -2,12 +2,12 @@
 
 namespace Abacus11\Collections;
 
-class CollectionOfStrings extends TypedArrayCollection
+class JSONs extends ArrayOf
 {
     /**
-     * Collection of strings
+     * Collection of JSON strings
      *
-     * Each element of the collection is a string
+     * Each element of the collection is a JSON string
      *
      * @param string[] $elements
      *
@@ -17,7 +17,7 @@ class CollectionOfStrings extends TypedArrayCollection
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('string');
+        $this->setElementType('json');
         parent::__construct($elements);
     }
 }

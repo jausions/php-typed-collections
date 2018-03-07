@@ -2,14 +2,14 @@
 
 namespace Abacus11\Collections;
 
-class CollectionOfCallables extends TypedArrayCollection
+class Resources extends ArrayOf
 {
     /**
-     * Collection of callables
+     * Collection of resources
      *
-     * Each element of the collection is a callable
+     * Each element of the collection is a resource
      *
-     * @param callable[] $elements
+     * @param resource[] $elements
      *
      * @throws \AssertionError
      * @throws \Exception
@@ -17,7 +17,7 @@ class CollectionOfCallables extends TypedArrayCollection
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('callable');
+        $this->setElementType('resource');
         parent::__construct($elements);
     }
 }

@@ -2,14 +2,14 @@
 
 namespace Abacus11\Collections;
 
-class CollectionOfObjects extends TypedArrayCollection
+class Arrays extends ArrayOf
 {
     /**
-     * Collection of objects
+     * Collection of arrays
      *
-     * Each element of the collection is an object
+     * Each element of the collection is an array
      *
-     * @param object[] $elements
+     * @param array[] $elements
      *
      * @throws \AssertionError
      * @throws \Exception
@@ -17,7 +17,7 @@ class CollectionOfObjects extends TypedArrayCollection
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('object');
+        $this->setElementType('array');
         parent::__construct($elements);
     }
 }

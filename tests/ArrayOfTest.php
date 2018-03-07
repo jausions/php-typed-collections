@@ -1,12 +1,12 @@
 <?php
 
-use Abacus11\Collections\TypedArrayCollection;
+use Abacus11\Collections\ArrayOf;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases for the TypedArrayCollection and TypedCollectionTrait
+ * Test cases for the ArrayOf and TypedCollectionTrait
  */
-class TypedArrayCollectionTest extends TestCase
+class ArrayOfTest extends TestCase
 {
     /**
      * Provides a list of matching type / value pairs
@@ -40,7 +40,7 @@ class TypedArrayCollectionTest extends TestCase
             ])],
             ['resource', fopen(__FILE__, 'r')],
             [__CLASS__, $this],
-            [__CLASS__, new class extends TypedArrayCollectionTest {}],
+            [__CLASS__, new class extends ArrayOfTest {}],
         ];
     }
 
@@ -252,12 +252,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
-     * @covers \Abacus11\Collections\TypedArrayCollection::isElementType()
+     * @covers \Abacus11\Collections\ArrayOf::isElementType()
      */
     public function testValueIsValidForSameTypeCollection($type, $value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType($type);
+        $collection = (new ArrayOf())->setElementType($type);
         $this->assertTrue($collection->isElementType($value));
     }
 
@@ -271,12 +270,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
-     * @covers \Abacus11\Collections\TypedArrayCollection::isElementType()
+     * @covers \Abacus11\Collections\ArrayOf::isElementType()
      */
     public function testValueIsInvalidForMismatchedTypeCollection($type, $type_element, $value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType($type);
+        $collection = (new ArrayOf())->setElementType($type);
         $this->assertFalse($collection->isElementType($value));
     }
 
@@ -290,12 +288,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\TypedArrayCollection::add()
+     * @covers \Abacus11\Collections\ArrayOf::add()
      */
     public function testCanAddValueToSameTypeCollection($type, $value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType($type);
+        $collection = (new ArrayOf())->setElementType($type);
         $collection[] = $value;
         $this->assertEquals($value, $collection->first());
     }
@@ -309,12 +306,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider validJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\TypedArrayCollection::add()
+     * @covers \Abacus11\Collections\ArrayOf::add()
      */
     public function testCanAddValidJSONToJSONCollection($value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType('json');
+        $collection = (new ArrayOf())->setElementType('json');
         $collection[] = $value;
         $this->assertEquals($value, $collection->first());
     }
@@ -328,12 +324,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider invalidJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\TypedArrayCollection::add()
+     * @covers \Abacus11\Collections\ArrayOf::add()
      */
     public function testCannotAddInvalidJSONToJSONCollection($value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType('json');
+        $collection = (new ArrayOf())->setElementType('json');
 
         $this->expectException(\TypeError::class);
         $collection[] = $value;
@@ -350,12 +345,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\TypedArrayCollection::add()
+     * @covers \Abacus11\Collections\ArrayOf::add()
      */
     public function testCannotAddWrongBasicTypeToCollection($type_collection, $type_element, $element): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType($type_collection);
+        $collection = (new ArrayOf())->setElementType($type_collection);
 
         $this->expectException(\TypeError::class);
         $collection[] = $element;
@@ -367,11 +361,11 @@ class TypedArrayCollectionTest extends TestCase
      * @throws TypeError
      *
      * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\TypedArrayCollection::add()
+     * @covers \Abacus11\Collections\ArrayOf::add()
      */
     public function testCannotAddElementToNonTypedCollection(): void
     {
-        $collection = new TypedArrayCollection();
+        $collection = new ArrayOf();
 
         $this->expectException(\Error::class);
         $collection[] = true;
@@ -387,12 +381,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\TypedArrayCollection::set()
+     * @covers \Abacus11\Collections\ArrayOf::set()
      */
     public function testCanAddValueWithKeyToSameTypeCollection($type, $value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType($type);
+        $collection = (new ArrayOf())->setElementType($type);
         $collection['abc'] = $value;
         $this->assertEquals($value, $collection->first());
     }
@@ -406,12 +399,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider validJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\TypedArrayCollection::set()
+     * @covers \Abacus11\Collections\ArrayOf::set()
      */
     public function testCanAddValidJSONWithKeyToJSONCollection($value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType('json');
+        $collection = (new ArrayOf())->setElementType('json');
         $collection['xyz'] = $value;
         $this->assertEquals($value, $collection->first());
     }
@@ -425,12 +417,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider invalidJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\TypedArrayCollection::set()
+     * @covers \Abacus11\Collections\ArrayOf::set()
      */
     public function testCannotAddInvalidJSONWithKeyToJSONCollection($value): void
     {
-        $collection = new TypedArrayCollection();
-        $collection->setElementType('json');
+        $collection = (new ArrayOf())->setElementType('json');
 
         $this->expectException(\TypeError::class);
         $collection[123] = $value;
@@ -447,11 +438,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\TypedArrayCollection::set()
+     * @covers \Abacus11\Collections\ArrayOf::set()
      */
     public function testCannotAddWrongBasicTypeWithKeyToCollection($type_collection, $type_element, $element): void
     {
-        $collection = new TypedArrayCollection();
+        $collection = new ArrayOf();
         $collection->setElementType($type_collection);
 
         $this->expectException(\TypeError::class);
@@ -464,11 +455,11 @@ class TypedArrayCollectionTest extends TestCase
      * @throws TypeError
      *
      * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     * @covers \Abacus11\Collections\TypedArrayCollection::set()
+     * @covers \Abacus11\Collections\ArrayOf::set()
      */
     public function testCannotAddElementWithKeyToNonConfiguredCollection(): void
     {
-        $collection = new TypedArrayCollection();
+        $collection = new ArrayOf();
 
         $this->expectException(\Error::class);
         $collection[0] = true;
@@ -480,11 +471,11 @@ class TypedArrayCollectionTest extends TestCase
      * @throws TypeError
      *
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
-     * @covers \Abacus11\Collections\TypedArrayCollection::setElementType()
+     * @covers \Abacus11\Collections\ArrayOf::setElementType()
      */
     public function testCannotChangeTheTypeOfNonEmptyCollection(): void
     {
-        $collection = new TypedArrayCollection();
+        $collection = new ArrayOf();
         $collection->setElementType('string');
         $collection[] = (\Faker\Factory::create())->word;
 
@@ -498,11 +489,11 @@ class TypedArrayCollectionTest extends TestCase
      * @throws TypeError
      *
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
-     * @covers \Abacus11\Collections\TypedArrayCollection::setElementType()
+     * @covers \Abacus11\Collections\ArrayOf::setElementType()
      */
     public function testCannotChangeTheTypeOfTypedCollection(): void
     {
-        $collection = new TypedArrayCollection();
+        $collection = new ArrayOf();
         $collection->setElementType('string');
 
         $this->expectException(\Exception::class);
@@ -515,12 +506,12 @@ class TypedArrayCollectionTest extends TestCase
      * @throws TypeError
      *
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
-     * @covers \Abacus11\Collections\TypedArrayCollection::setElementTypeLike()
+     * @covers \Abacus11\Collections\ArrayOf::setElementTypeLike()
      */
     public function testCannotUseNullAsSampleType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        (new TypedArrayCollection())->setElementTypeLike(null);
+        (new ArrayOf())->setElementTypeLike(null);
     }
 
     /**
@@ -534,11 +525,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider sampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
-     * @covers \Abacus11\Collections\TypedArrayCollection::setElementTypeLike()
+     * @covers \Abacus11\Collections\ArrayOf::setElementTypeLike()
      */
     public function testCanAddValidValueToLikeElementTypeCollection($type, $sample, $value): void
     {
-        $collection = new TypedArrayCollection();
+        $collection = new ArrayOf();
         $collection->setElementTypeLike($sample)
             ->add($value);
         $this->assertEquals($value, $collection->first());
@@ -556,11 +547,11 @@ class TypedArrayCollectionTest extends TestCase
      *
      * @dataProvider mismatchedSampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
-     * @covers \Abacus11\Collections\TypedArrayCollection::setElementTypeLike()
+     * @covers \Abacus11\Collections\ArrayOf::setElementTypeLike()
      */
     public function testCannotAddInvalidValueToLikeElementTypeCollection($sample_type, $sample, $value_type, $value): void
     {
-        $collection = (new TypedArrayCollection())->setElementTypeLike($sample);
+        $collection = (new ArrayOf())->setElementTypeLike($sample);
 
         $this->expectException(\TypeError::class);
         $collection[] = $value;
@@ -571,12 +562,12 @@ class TypedArrayCollectionTest extends TestCase
      * @throws Exception
      * @throws TypeError
      *
-     * @covers \Abacus11\Collections\TypedArrayCollection::__construct()
+     * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
     public function testFirstElementBlocksWrongInitialValues()
     {
         $this->expectException(\TypeError::class);
-        new TypedArrayCollection([1, '2', false, 2.5]);
+        new ArrayOf([1, '2', false, 2.5]);
     }
 
     /**
@@ -584,11 +575,11 @@ class TypedArrayCollectionTest extends TestCase
      * @throws Exception
      * @throws TypeError
      *
-     * @covers \Abacus11\Collections\TypedArrayCollection::__construct()
+     * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
     public function testFirstElementSetsTypeOfCollection()
     {
-        $collection = new TypedArrayCollection([1]);
+        $collection = new ArrayOf([1]);
 
         $this->expectException(\TypeError::class);
         $collection[] = 'xyz';
@@ -599,11 +590,11 @@ class TypedArrayCollectionTest extends TestCase
      * @throws Exception
      * @throws TypeError
      *
-     * @covers \Abacus11\Collections\TypedArrayCollection::__construct()
+     * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
     public function testFirstElementLetsValidInitialValues()
     {
-        $collection = new TypedArrayCollection([0, 1, 2, 3, 4]);
+        $collection = new ArrayOf([0, 1, 2, 3, 4]);
         $this->assertEquals($collection[4], 4);
     }
 
@@ -612,12 +603,12 @@ class TypedArrayCollectionTest extends TestCase
      * @throws Exception
      * @throws TypeError
      *
-     * @covers \Abacus11\Collections\TypedArrayCollection::__construct()
+     * @covers \Abacus11\Collections\ArrayOf::__construct()
      */
     public function testCannotInitializeCollectionWithNull()
     {
         $this->expectException(\InvalidArgumentException::class);
-        new TypedArrayCollection([null, 'abc']);
+        new ArrayOf([null, 'abc']);
     }
 
     /**
@@ -627,7 +618,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testArrayCollectionAcceptsOnlyArrays()
     {
-        $collection = new \Abacus11\Collections\CollectionOfArrays([[], [1, 2, 3], ['a', 'b', 'c']]);
+        $collection = new \Abacus11\Collections\Arrays([[], [1, 2, 3], ['a', 'b', 'c']]);
         $this->expectException(\TypeError::class);
         $collection[] = false;
     }
@@ -639,7 +630,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testBooleanCollectionAcceptsOnlyBooleans()
     {
-        $collection = new \Abacus11\Collections\CollectionOfBooleans([false, true, false]);
+        $collection = new \Abacus11\Collections\Booleans([false, true, false]);
         $this->expectException(\TypeError::class);
         $collection[1] = 'abc';
     }
@@ -651,7 +642,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testCallableCollectionAcceptsOnlyCallables()
     {
-        $collection = new \Abacus11\Collections\CollectionOfCallables([function(){}, [$this, __FUNCTION__], 'ucfirst']);
+        $collection = new \Abacus11\Collections\Callables([function(){}, [$this, __FUNCTION__], 'ucfirst']);
         $this->expectException(\TypeError::class);
         $collection['abc'] = 3.1415;
     }
@@ -663,7 +654,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testDoubleCollectionAcceptsOnlyDoubles()
     {
-        $collection = new \Abacus11\Collections\CollectionOfDoubles([1.1, 2.0, -3.45]);
+        $collection = new \Abacus11\Collections\Doubles([1.1, 2.0, -3.45]);
         $this->expectException(\TypeError::class);
         $collection['xyz'] = 3;
     }
@@ -675,7 +666,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testIntegerCollectionAcceptsOnlyIntegers()
     {
-        $collection = new \Abacus11\Collections\CollectionOfIntegers([1, 0, 2]);
+        $collection = new \Abacus11\Collections\Integers([1, 0, 2]);
         $this->expectException(\TypeError::class);
         $collection[2] = 'Hello world!';
     }
@@ -687,7 +678,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testJSONCollectionAcceptsOnlyJSON()
     {
-        $collection = new \Abacus11\Collections\CollectionOfJSONs(['null', '{"key":"value"}']);
+        $collection = new \Abacus11\Collections\JSONs(['null', '{"key":"value"}']);
         $this->expectException(\TypeError::class);
         $collection['other'] = function() {};
     }
@@ -699,7 +690,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testNumberCollectionAcceptsOnlyNumbers()
     {
-        $collection = new \Abacus11\Collections\CollectionOfNumbers(['123', -876543, 0, 9.876, '-4.5']);
+        $collection = new \Abacus11\Collections\Numbers(['123', -876543, 0, 9.876, '-4.5']);
         $this->expectException(\TypeError::class);
         $collection[] = new stdClass();
     }
@@ -711,7 +702,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testObjectCollectionAcceptsOnlyObjects()
     {
-        $collection = new \Abacus11\Collections\CollectionOfObjects([new stdClass(), new class {}, function() {}, $this]);
+        $collection = new \Abacus11\Collections\Objects([new stdClass(), new class {}, function() {}, $this]);
         $this->expectException(\TypeError::class);
         $collection[] = 'text';
     }
@@ -723,7 +714,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testResourceCollectionAcceptsOnlyResources()
     {
-        $collection = new \Abacus11\Collections\CollectionOfResources([fopen(__FILE__, 'r'), opendir(__DIR__)]);
+        $collection = new \Abacus11\Collections\Resources([fopen(__FILE__, 'r'), opendir(__DIR__)]);
         $this->expectException(\TypeError::class);
         $collection[] = 123;
     }
@@ -735,7 +726,7 @@ class TypedArrayCollectionTest extends TestCase
      */
     public function testStringCollectionAcceptsOnlyStrings()
     {
-        $collection = new \Abacus11\Collections\CollectionOfStrings(['abc', '']);
+        $collection = new \Abacus11\Collections\Strings(['abc', '']);
         $this->expectException(\TypeError::class);
         $collection[] = true;
     }

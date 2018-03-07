@@ -1,9 +1,9 @@
 <?php
 
-use Abacus11\Collections\CollectionOfStrings;
+use Abacus11\Collections\Strings;
 use PHPUnit\Framework\TestCase;
 
-class CollectionOfStringsTest extends TestCase
+class StringsTest extends TestCase
 {
     /**
      * @throws AssertionError
@@ -12,7 +12,7 @@ class CollectionOfStringsTest extends TestCase
      */
     public function testStringCollectionAcceptsOnlyStrings()
     {
-        $collection = new CollectionOfStrings(['abc', '']);
+        $collection = new Strings(['abc', '']);
         $this->expectException(\TypeError::class);
         $collection[] = true;
     }

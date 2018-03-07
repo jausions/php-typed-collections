@@ -2,14 +2,14 @@
 
 namespace Abacus11\Collections;
 
-class CollectionOfDoubles extends TypedArrayCollection
+class Integers extends ArrayOf
 {
     /**
-     * Collection of doubles
+     * Collection of integers
      *
-     * Each element of the collection is a double (also known as float in PHP.)
+     * Each element of the collection is an integer
      *
-     * @param double[] $elements
+     * @param integer[] $elements
      *
      * @throws \AssertionError
      * @throws \Exception
@@ -17,7 +17,7 @@ class CollectionOfDoubles extends TypedArrayCollection
      */
     public function __construct(array $elements = [])
     {
-        $this->setElementType('double');
+        $this->setElementType('integer');
         parent::__construct($elements);
     }
 }

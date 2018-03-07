@@ -1,6 +1,6 @@
 <?php
 
-use Abacus11\Collections\CollectionOfObjects;
+use Abacus11\Collections\Objects;
 use PHPUnit\Framework\TestCase;
 
 class CollectionOfObjectsTest extends TestCase
@@ -12,7 +12,7 @@ class CollectionOfObjectsTest extends TestCase
      */
     public function testObjectCollectionAcceptsOnlyObjects()
     {
-        $collection = new CollectionOfObjects([new stdClass(), new class {}, function() {}, $this]);
+        $collection = new Objects([new stdClass(), new class {}, function() {}, $this]);
         $this->expectException(\TypeError::class);
         $collection[] = 'text';
     }

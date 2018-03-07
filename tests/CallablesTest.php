@@ -1,9 +1,9 @@
 <?php
 
-use Abacus11\Collections\CollectionOfCallables;
+use Abacus11\Collections\Callables;
 use PHPUnit\Framework\TestCase;
 
-class CollectionOfCallablesTest extends TestCase
+class CallablesTest extends TestCase
 {
     /**
      * @throws AssertionError
@@ -12,7 +12,7 @@ class CollectionOfCallablesTest extends TestCase
      */
     public function testCallableCollectionAcceptsOnlyCallables()
     {
-        $collection = new CollectionOfCallables([function(){}, [$this, __FUNCTION__], 'ucfirst']);
+        $collection = new Callables([function(){}, [$this, __FUNCTION__], 'ucfirst']);
         $this->expectException(\TypeError::class);
         $collection['abc'] = 3.1415;
     }

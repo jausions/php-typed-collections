@@ -1,9 +1,9 @@
 <?php
 
-use Abacus11\Collections\CollectionOfBooleans;
+use Abacus11\Collections\Booleans;
 use PHPUnit\Framework\TestCase;
 
-class CollectionOfBooleansTest extends TestCase
+class BooleansTest extends TestCase
 {
     /**
      * @throws AssertionError
@@ -12,7 +12,7 @@ class CollectionOfBooleansTest extends TestCase
      */
     public function testBooleanCollectionAcceptsOnlyBooleans()
     {
-        $collection = new CollectionOfBooleans([false, true, false]);
+        $collection = new Booleans([false, true, false]);
         $this->expectException(\TypeError::class);
         $collection[1] = 'abc';
     }
