@@ -8,7 +8,7 @@ This library provides traits that can be used to implement type checking.
 If you do not wish to implement anything, simply use one of the prebuilt
 solutions below:
 
-- For Doctrine collections, see this package: [jausions/php-typed-doctrine-collections]([http://github.com/jausions/php-typed-doctrine-collections).
+- For Doctrine collections, see this package: [jausions/php-typed-doctrine-collections]([https://github.com/jausions/php-typed-doctrine-collections).
 
 For the purpose of this library, the term *type* is used loosely to
 refer to built-in PHP types, classes, and even application-domain types.
