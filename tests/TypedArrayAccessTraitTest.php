@@ -2,10 +2,15 @@
 
 use PHPUnit\Framework\TestCase;
 
+class ArrayCollectionOf implements \ArrayAccess, \Abacus11\Collections\TypedCollection
+{
+    use \Abacus11\Collections\TypedArrayAccessTrait;
+}
+
 /**
- * Test cases for the ArrayCollectionOf and TypedCollectionTrait
+ * Test cases for the TypedArrayAccessTrait
  */
-class ArrayCollectionOfTest extends TestCase
+class TypedArrayAccessTraitTest extends TestCase
 {
     /**
      * Provides a list of matching type / value pairs
@@ -39,7 +44,7 @@ class ArrayCollectionOfTest extends TestCase
             ])],
             ['resource', fopen(__FILE__, 'r')],
             [__CLASS__, $this],
-            [__CLASS__, new class extends ArrayCollectionOfTest {}],
+            [__CLASS__, new class extends TypedArrayAccessTraitTest {}],
         ];
     }
 
@@ -272,33 +277,33 @@ class ArrayCollectionOfTest extends TestCase
      * @param mixed $value
      *
      * @dataProvider basicTypedElementsProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::add()
+     * @covers \Abacus11\Collections\TypedArrayAccessTrait::offsetSet()
      */
     public function testCanAddValueToSameTypeCollection($type, $value): void
     {
         $collection = (new ArrayCollectionOf())->setElementType($type);
-        $collection[] = $value;
-        $this->assertEquals($value, $collection->first());
+        $collection[0] = $value;
+        $this->assertEquals($value, $collection[0]);
     }
 
     /**
      * @param mixed $value
      *
      * @dataProvider validJSONEncodedValuesProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::add()
+     * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      */
     public function testCanAddValidJSONToJSONCollection($value): void
     {
         $collection = (new ArrayCollectionOf())->setElementType('json');
-        $collection[] = $value;
-        $this->assertEquals($value, $collection->first());
+        $collection[0] = $value;
+        $this->assertEquals($value, $collection[0]);
     }
 
     /**
      * @param mixed $value
      *
      * @dataProvider invalidJSONEncodedValuesProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::add()
+     * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      */
     public function testCannotAddInvalidJSONToJSONCollection($value): void
     {
@@ -314,7 +319,7 @@ class ArrayCollectionOfTest extends TestCase
      * @param mixed $element
      *
      * @dataProvider mismatchedBasicTypedElementsProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::add()
+     * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      */
     public function testCannotAddWrongBasicTypeToCollection($type_collection, $type_element, $element): void
     {
@@ -324,98 +329,12 @@ class ArrayCollectionOfTest extends TestCase
         $collection[] = $element;
     }
 
-    /**
-     * @covers \Abacus11\Collections\TypedCollectionTrait::add()
-     * @covers \Abacus11\Collections\ArrayCollectionOf::add()
-     */
     public function testCannotAddElementToNonTypedCollection(): void
     {
         $collection = new ArrayCollectionOf();
 
         $this->expectException(\Error::class);
         $collection[] = true;
-    }
-
-    /**
-     * @param string $type
-     * @param mixed $value
-     *
-     * @dataProvider basicTypedElementsProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     */
-    public function testCanAddValueWithKeyToSameTypeCollection($type, $value): void
-    {
-        $collection = (new ArrayCollectionOf())->setElementType($type);
-        $collection['abc'] = $value;
-        $this->assertEquals($value, $collection->first());
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @dataProvider validJSONEncodedValuesProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     */
-    public function testCanAddValidJSONWithKeyToJSONCollection($value): void
-    {
-        $collection = (new ArrayCollectionOf())->setElementType('json');
-        $collection['xyz'] = $value;
-        $this->assertEquals($value, $collection->first());
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @dataProvider invalidJSONEncodedValuesProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     */
-    public function testCannotAddInvalidJSONWithKeyToJSONCollection($value): void
-    {
-        $collection = (new ArrayCollectionOf())->setElementType('json');
-
-        $this->expectException(\TypeError::class);
-        $collection[123] = $value;
-    }
-
-    /**
-     * @param $type_collection
-     * @param $type_element
-     * @param mixed $element
-     *
-     * @dataProvider mismatchedBasicTypedElementsProvider
-     * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     */
-    public function testCannotAddWrongBasicTypeWithKeyToCollection($type_collection, $type_element, $element): void
-    {
-        $collection = new ArrayCollectionOf();
-        $collection->setElementType($type_collection);
-
-        $this->expectException(\TypeError::class);
-        $collection['456'] = $element;
-    }
-
-    /**
-     * @covers \Abacus11\Collections\TypedCollectionTrait::set()
-     */
-    public function testCannotAddElementWithKeyToNonConfiguredCollection(): void
-    {
-        $collection = new ArrayCollectionOf();
-
-        $this->expectException(\Error::class);
-        $collection[0] = true;
-    }
-
-    /**
-     * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
-     */
-    public function testCannotChangeTheTypeOfNonEmptyCollection(): void
-    {
-        $collection = new ArrayCollectionOf();
-        $collection->setElementType('string');
-        $collection[] = (\Faker\Factory::create())->word;
-
-        $this->expectException(\Exception::class);
-        $collection->setElementType('bool');
     }
 
     /**
@@ -449,10 +368,9 @@ class ArrayCollectionOfTest extends TestCase
      */
     public function testCanAddValidValueToLikeElementTypeCollection($type, $sample, $value): void
     {
-        $collection = new ArrayCollectionOf();
-        $collection->setElementTypeLike($sample)
-            ->add($value);
-        $this->assertEquals($value, $collection->first());
+        $collection = (new ArrayCollectionOf())->setElementTypeLike($sample);
+        $collection[0] = $value;
+        $this->assertEquals($value, $collection[0]);
     }
 
     /**
@@ -469,62 +387,6 @@ class ArrayCollectionOfTest extends TestCase
         $collection = (new ArrayCollectionOf())->setElementTypeLike($sample);
 
         $this->expectException(\TypeError::class);
-        $collection[] = $value;
-    }
-
-    /**
-     * @covers \Abacus11\Collections\ArrayCollectionOf::__construct()
-     */
-    public function testFirstElementBlocksWrongInitialValues()
-    {
-        $this->expectException(\TypeError::class);
-        new ArrayCollectionOf([1, '2', false, 2.5]);
-    }
-
-    /**
-     * @covers \Abacus11\Collections\ArrayCollectionOf::__construct()
-     */
-    public function testFirstElementSetsTypeOfCollection()
-    {
-        $collection = new ArrayCollectionOf([1]);
-
-        $this->expectException(\TypeError::class);
-        $collection[] = 'xyz';
-    }
-
-    /**
-     * @covers \Abacus11\Collections\ArrayCollectionOf::__construct()
-     */
-    public function testFirstElementLetsValidInitialValues()
-    {
-        $collection = new ArrayCollectionOf([0, 1, 2, 3, 4]);
-        $this->assertEquals($collection[4], 4);
-    }
-
-    /**
-     * @covers \Abacus11\Collections\ArrayCollectionOf::__construct()
-     */
-    public function testCannotInitializeCollectionWithNullValue()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        new ArrayCollectionOf([null, 'abc']);
-    }
-
-    /**
-     * @covers \Abacus11\Collections\ArrayCollectionOf::__construct()
-     */
-    public function testCannotInitializeCollectionWithNullType()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        new ArrayCollectionOf(null, ['abc', 'xyz']);
-    }
-
-    /**
-     * @covers \Abacus11\Collections\ArrayCollectionOf::__construct()
-     */
-    public function testCannotInitializeCollectionWithNullSingleArgument()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        new ArrayCollectionOf(null);
+        $collection[0] = $value;
     }
 }

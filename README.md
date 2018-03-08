@@ -3,12 +3,12 @@
 Type hinting is evolving but PHP 7 still does not currently provide
 a way to define the type of the elements of an array.
 
-This library is built on top of Doctrine/Collections to enforce type
-checking on elements added to a collection. We could also call them
-strongly typed arrays.
+This library provides traits that can be used to implement type checking.
 
-The aim is to leverage type hinting to help prevent bugs, or, at the very
-least, detect them earlier in the development cycle.
+If you do not wish to implement anything, simply use one of the prebuilt
+solutions below:
+
+- For Doctrine collections, see this package: [jausions/php-typed-doctrine-collections]([http://github.com/jausions/php-typed-doctrine-collections).
 
 For the purpose of this library, the term *type* is used loosely to
 refer to built-in PHP types, classes, and even application-domain types.
@@ -21,19 +21,25 @@ composer require jausions/php-typed-collections
 
 In the examples below, the `require 'vendor/autoload.php';` is implied.
 
-## Type Defined by Initial Value
 
-The first element passed to the constructor determines the criteria for
-the elements that come after it.
+## Simplistic Example
+
+This example only implements the [ArrayAccess PHP Predefined Interface](http://php.net/manual/en/class.arrayaccess.php).
+This means no `foreach` iteration, `count()`, and so on...
 
 ```php
 <?php
-use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
+use Abacus11\Collections\{
+    TypedCollection,
+    TypedArrayAccessTrait
+};
 
-$int_array = new ArrayOf([1, 2]);      // Okay
-$int_array = new ArrayOf([1, '2']);    // Not okay - throws \TypeError
-$int_array = new ArrayOf([null, 1]);   // Not okay - throws \InvalidArgumentException
+class ArrayOf implements \ArrayAccess, TypedCollection
+{
+    use TypedArrayAccessTrait;
+}
 ```
+
 
 ## Type Defined by a Sample Value
 
@@ -41,22 +47,23 @@ The element validation is done against the type of a sample value.
 
 ```php
 <?php
-use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
+// With the ArrayOf class defined above
 
 $sample = 1;
 $int_array = (new ArrayOf())->setElementTypeLike($sample);
 
-$int_array[] = 2;              // Okay
-$int_array[] = true;           // Not okay - throws \TypeError exception
+$int_array[] = 2;           // Okay
+$int_array[] = true;        // Not okay - throws \TypeError exception
 
 class SomeClass {}
 
 $sample = new SomeClass();
 $some = (new ArrayOf())->setElementTypeLike($sample);
 
-$some[] = new SomeClass();     // Okay
-$some[] = new stdClass();      // Not okay - throws \TypeError exception
+$some[] = new SomeClass();  // Okay
+$some[] = new stdClass();   // Not okay - throws \TypeError exception
 ```
+
 
 ## Type Defined by a Closure
 
@@ -64,9 +71,7 @@ The elements added to the collection can be checked with a closure:
 
 ```php
 <?php
-use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
-
-// Use the setElementType() method
+// With the ArrayOf class defined above
 
 $positive_int = (new ArrayOf())->setElementType(function ($value) {
     if (!is_integer($value)) {
@@ -75,24 +80,11 @@ $positive_int = (new ArrayOf())->setElementType(function ($value) {
     return ($value >= 0);
 });
 
-$positive_int['apples'] = 0;      // Okay
-$positive_int['oranges'] = 10;    // Okay
-$positive_int['bananas'] = -5;    // Not okay - throws \TypeError exception
-
-// Or directly in the constructor
-
-$negative_int = new ArrayOf(
-    function ($value) {
-        if (!is_integer($value)) {
-            return false;
-        }
-        return ($value <= 0);
-    }
-);
-
-$negative_int[] = -50;            // Okay
-$negative_int[] = 5;              // Not okay - throws \TypeError exception
+$positive_int['apples'] = 0;        // Okay
+$positive_int['oranges'] = 10;      // Okay
+$positive_int['bananas'] = -5;      // Not okay - throws a \TypeError exception
 ```
+
 
 ## Type Defined by a Class Name
 
@@ -100,8 +92,7 @@ Objects added to the collection can be checked against a class name:
 
 ```php
 <?php
-
-use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
+// With the ArrayOf class defined above
 
 class A {}
 
@@ -109,26 +100,18 @@ class B {}
 
 class AA extends A {}
 
-// Use the setElementType() method
-
 $some_a = (new ArrayOf())->setElementType(A::class);
 
 $some_a[] = new A();    // Okay
 $some_a[] = new AA();   // Okay
 $some_a[] = new B();    // Not okay - throws \TypeError exception
-
-// Or directly in the constructor
-
-$some_b = new ArrayOf(B::class);
-
-$some_b[] = new B();    // Okay
-$some_b[] = new A();    // Not okay - throws \TypeError exception
 ```
+
 
 ## Built-In Library Types
 
 Apart from a closure or a class name, the `setElementType()` method also
-accepts the following values:
+accepts the following predefined values:
 
 - `array`
 - `boolean`
@@ -143,41 +126,30 @@ accepts the following values:
 
 ```php
 <?php
-use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
-
-// Use the setElementType() method
+// With the ArrayOf class defined above
 
 $int_array = (new ArrayOf())->setElementType('integer');
 
-$int_array[] = 1;      // Okay
-$int_array[] = '1';    // Not okay - throws \TypeError exception
-
-// Or directly in the constructor
-
-$int_array = new ArrayOf('integer');
-
-$int_array[] = 20;     // Okay
-$int_array[] = true;   // Not okay - throws \TypeError exception
+$int_array[] = 1;       // Okay
+$int_array[] = '1';     // Not okay - throws \TypeError exception
 ```
 
-## Built-In Collections
 
-Several typed collections are predefined:
+## Checking a Value
 
-- `\Abacus11\Collections\Arrays`
-- `\Abacus11\Collections\Booleans`
-- `\Abacus11\Collections\Callables`
-- `\Abacus11\Collections\Doubles`
-- `\Abacus11\Collections\Integers`
-- `\Abacus11\Collections\Numbers`
-- `\Abacus11\Collections\JSONs`
-- `\Abacus11\Collections\Objects`
-- `\Abacus11\Collections\Resources`
-- `\Abacus11\Collections\Strings`
+If you want to know if a value would be accepted in the typed collection,
+you can use the `isElementType()` method.
 
 ```php
 <?php
-$integers = new \Abacus11\Collections\Integers([1, 2, 3, 0, -1]);
+// With the ArrayOf class defined above
+
+$collection = (new ArrayOf())->setElementType('integer');
+
+$value = 'abc';
+if ($collection->isElementType($value)) {
+    // To something
+}
 ```
 
 ## Custom Type Collections
@@ -188,8 +160,6 @@ interface.
 
 ```php
 <?php
-use Abacus11\Collections\ArrayCollectionOf as ArrayOf;
-
 class Vehicle
 {
 }
@@ -207,16 +177,11 @@ class Submarine extends Vehicle
     public $name;
 }
 
+// With the ArrayOf class defined above
 class Cars extends ArrayOf
 {
-    /**
-     * @param Car[] $cars
-     */
-    public function __construct(array $cars = []) {
-        parent::__construct(Car::class, $cars);
-        // - or -
-        //$this->setElementType(Car::class);
-        //parent::__construct($cars);
+    public function __construct() {
+        $this->setElementType(Car::class);
     }
 }
 
@@ -229,7 +194,7 @@ class Parking
 
     public function __construct()
     {
-        $this->lot = new Cars([]);
+        $this->lot = new Cars();
     }
 
     public function enter(Vehicle $car)
@@ -258,8 +223,8 @@ $my_sub = new Submarine();
 $my_sub->name = 'Nautilus';
 
 $parking = new Parking();
-$parking->enter($my_car);   // Okay
-$parking->enter($my_sub);   // Not okay - throws \TypeError exception
+$parking->enter($my_car);       // Okay
+$parking->enter($my_sub);       // Not okay - throws \TypeError exception
 ```
 
 Remarks:

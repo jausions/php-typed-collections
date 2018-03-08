@@ -3,34 +3,15 @@
 require '../vendor/autoload.php';
 
 use Abacus11\Collections\{
-    TypedCollection,
     TypedArrayAccessTrait,
-    TypedCollectionTrait
+    TypedCollection
 };
 
 ## Very simplistic implementation of the ArrayAccess interface
 
 class ArrayOf implements \ArrayAccess, TypedCollection
 {
-    use TypedArrayAccessTrait,
-        TypedCollectionTrait;
-
-    protected $elements = [];
-
-    public function offsetExists($offset)
-    {
-        return array_key_exists($offset, $this->elements);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->elements[$offset];
-    }
-
-    public function offsetUnset($offset)
-    {
-        unset($this->elements[$offset]);
-    }
+    use TypedArrayAccessTrait;
 }
 
 
@@ -43,7 +24,7 @@ $int_array[] = 2;
 try {
     $int_array[] = true;
 } catch (\TypeError $e) {
-    echo ' 3. '.$e->getMessage().PHP_EOL;
+    echo ' 1. '.$e->getMessage().PHP_EOL;
 }
 
 class SomeClass {}
@@ -55,7 +36,7 @@ $some[] = new SomeClass();
 try {
     $some[] = new stdClass();
 } catch (\TypeError $e) {
-    echo ' 4. '.$e->getMessage().PHP_EOL;
+    echo ' 2. '.$e->getMessage().PHP_EOL;
 }
 
 
@@ -75,25 +56,7 @@ $positive_int['oranges'] = 10;
 try {
     $positive_int['bananas'] = -5;
 } catch (\TypeError $e) {
-    echo ' 5. '.$e->getMessage().PHP_EOL;
-}
-
-// Or directly in the constructor
-
-$negative_int = new ArrayOf(
-    function ($value) {
-        if (!is_integer($value)) {
-            return false;
-        }
-        return ($value <= 0);
-    }
-);
-
-$negative_int[] = -50;
-try {
-    $negative_int[] = 5;
-} catch (\TypeError $e) {
-    echo ' 6. '.$e->getMessage().PHP_EOL;
+    echo ' 3. '.$e->getMessage().PHP_EOL;
 }
 
 
@@ -114,18 +77,7 @@ $some_a[] = new AA();
 try {
     $some_a[] = new B();
 } catch (\TypeError $e) {
-    echo ' 7. '.$e->getMessage().PHP_EOL;
-}
-
-// Or directly in the constructor
-
-$some_b = new ArrayOf(B::class);
-
-$some_b[] = new B();
-try {
-    $some_b[] = new A();
-} catch (\TypeError $e) {
-    echo ' 8. '.$e->getMessage().PHP_EOL;
+    echo ' 4. '.$e->getMessage().PHP_EOL;
 }
 
 
@@ -139,18 +91,7 @@ $int_array[] = 1;
 try {
     $int_array[] = '1';
 } catch (\TypeError $e) {
-    echo ' 9. '.$e->getMessage().PHP_EOL;
-}
-
-// Or directly in the constructor
-
-$int_array = new ArrayOf('integer');
-
-$int_array[] = 20;
-try {
-    $int_array[] = true;
-} catch (\TypeError $e) {
-    echo '10. '.$e->getMessage().PHP_EOL;
+    echo ' 5. '.$e->getMessage().PHP_EOL;
 }
 
 
@@ -175,14 +116,8 @@ class Submarine extends Vehicle
 
 class Cars extends ArrayOf
 {
-    /**
-     * @param Car[] $cars
-     */
-    public function __construct(array $cars = []) {
-        parent::__construct(Car::class, $cars);
-        // - or -
-        //$this->setElementType(Car::class);
-        //parent::__construct($cars);
+    public function __construct() {
+        $this->setElementType(Car::class);
     }
 }
 
@@ -228,6 +163,6 @@ $parking->enter($my_car);
 try {
     $parking->enter($my_sub);
 } catch (\TypeError $e) {
-    echo '11. '.$e->getMessage().PHP_EOL;
+    echo ' 6. '.$e->getMessage().PHP_EOL;
 }
 

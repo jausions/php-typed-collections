@@ -26,7 +26,7 @@ trait TypedCollectionTrait
      */
     public function isElementType($element)
     {
-        // You may receive the error: "Function name must be a string"
+        // You may receive the Error: "Function name must be a string"
         // if the collection type wasn't set before trying to add elements.
         return ($this->element_type_checker)($element);
     }
