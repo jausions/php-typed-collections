@@ -2,7 +2,6 @@
   "name": "jausions/php-typed-collections",
   "description": "Collections and arrays with type constraint.",
   "type": "library",
-  "minimum-stability": "beta",
   "license": "MIT",
   "authors": [
     {
@@ -19,5 +18,8 @@
   },
   "autoload": {
     "psr-4": {"Abacus11\\": "src/"}
+  },
+  "suggest": {
+    "jausions/php-typed-doctrine-collections": "Implementation of typed collections based on Doctrine Collections"
   }
 }
