@@ -148,7 +148,7 @@ $collection = (new ArrayOf())->setElementType('integer');
 
 $value = 'abc';
 if ($collection->isElementType($value)) {
-    // To something
+    // Do something
 }
 ```
 
