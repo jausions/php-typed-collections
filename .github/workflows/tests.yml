@@ -1,0 +1,42 @@
+name: Run tests
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - master
+
+jobs:
+  test-php:
+    name: Test on php ${{ matrix.php-version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["5.6", "7.0", "7.1", "7.2", "7.3", "7.4", "8.0", "8.1", "8.2"]
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        experimental: [false]
+        php-extensions: ["json"]
+        coverage-extension: ["none"]
+        include:
+          - { php-version: 'nightly', os: ubuntu-latest, experimental: true }
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use php ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: ${{ matrix.coverage-extension }}
+          extensions: ${{ matrix.php-extensions }}
+          ini-values: display_errors=on, display_startup_errors=on, error_reporting=-1
+      - name: Cache module
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache/
+          key: composer-cache
+      - name: Install dependencies
+        run: composer install --no-interaction
+      - name: Run PHPUnit test
+        run: vendor/bin/phpunit tests/

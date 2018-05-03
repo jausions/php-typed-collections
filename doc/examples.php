@@ -2,10 +2,9 @@
 
 require '../vendor/autoload.php';
 
-use Abacus11\Collections\{
-    TypedArrayAccessTrait,
-    TypedCollection
-};
+use Abacus11\Collections\Exception\InvalidArgumentTypeException;
+use Abacus11\Collections\TypedArrayAccessTrait;
+use Abacus11\Collections\TypedCollection;
 
 ## Very simplistic implementation of the ArrayAccess interface
 
@@ -23,7 +22,7 @@ $int_array = (new ArrayOf())->setElementTypeLike($sample);
 $int_array[] = 2;
 try {
     $int_array[] = true;
-} catch (\TypeError $e) {
+} catch (InvalidArgumentTypeException $e) {
     echo ' 1. '.$e->getMessage().PHP_EOL;
 }
 
@@ -35,7 +34,7 @@ $some = (new ArrayOf())->setElementTypeLike($sample);
 $some[] = new SomeClass();
 try {
     $some[] = new stdClass();
-} catch (\TypeError $e) {
+} catch (InvalidArgumentTypeException $e) {
     echo ' 2. '.$e->getMessage().PHP_EOL;
 }
 
@@ -45,7 +44,7 @@ try {
 // Use setElementType() method
 
 $positive_int = (new ArrayOf())->setElementType(function ($value) {
-    if (!is_integer($value)) {
+    if (!is_int($value)) {
         return false;
     }
     return ($value >= 0);
@@ -55,7 +54,7 @@ $positive_int['apples'] = 0;
 $positive_int['oranges'] = 10;
 try {
     $positive_int['bananas'] = -5;
-} catch (\TypeError $e) {
+} catch (InvalidArgumentTypeException $e) {
     echo ' 3. '.$e->getMessage().PHP_EOL;
 }
 
@@ -76,7 +75,7 @@ $some_a[] = new A();
 $some_a[] = new AA();
 try {
     $some_a[] = new B();
-} catch (\TypeError $e) {
+} catch (InvalidArgumentTypeException $e) {
     echo ' 4. '.$e->getMessage().PHP_EOL;
 }
 
@@ -85,23 +84,23 @@ try {
 
 // Use the setElementType() method
 
-$int_array = (new ArrayOf())->setElementType('integer');
+$int_array = (new ArrayOf())->setElementType(TypedCollection::OF_INTEGERS);
 
 $int_array[] = 1;
 try {
     $int_array[] = '1';
-} catch (\TypeError $e) {
+} catch (InvalidArgumentTypeException $e) {
     echo ' 5. '.$e->getMessage().PHP_EOL;
 }
 
 
 ## Custom Type Collections
 
-class Vehicle
+interface Vehicle
 {
 }
 
-class Car extends Vehicle
+class Car implements Vehicle
 {
     public $make;
     public $model;
@@ -109,7 +108,7 @@ class Car extends Vehicle
     public $license_plate_number;
 }
 
-class Submarine extends Vehicle
+class Submarine implements Vehicle
 {
     public $name;
 }
@@ -123,9 +122,7 @@ class Cars extends ArrayOf
 
 class Parking
 {
-    /**
-     * @var Cars
-     */
+    /** @var Cars */
     protected $lot;
 
     public function __construct()
@@ -162,7 +159,7 @@ $parking = new Parking();
 $parking->enter($my_car);
 try {
     $parking->enter($my_sub);
-} catch (\TypeError $e) {
+} catch (InvalidArgumentTypeException $e) {
     echo ' 6. '.$e->getMessage().PHP_EOL;
 }
 

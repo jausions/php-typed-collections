@@ -1,11 +1,23 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use Abacus11\Collections\Exception\InvalidArgumentTypeException;
+use Abacus11\Collections\Exception\TypeNotSetException;
+use Faker\Factory;
+
+if (class_exists('PHPUnit_Framework_TestCase')) {
+    class TestCase extends PHPUnit_Framework_TestCase {}
+} else {
+    class TestCase extends PHPUnit\Framework\TestCase {}
+}
 
 class ArrayCollectionOf implements \ArrayAccess, \Abacus11\Collections\TypedCollection
 {
     use \Abacus11\Collections\TypedArrayAccessTrait;
 }
+
+class SomeTestClass {}
+
+class SomeTestClassExtended extends SomeTestClass {}
 
 /**
  * Test cases for the TypedArrayAccessTrait
@@ -17,34 +29,37 @@ class TypedArrayAccessTraitTest extends TestCase
      *
      * @return array
      */
-    public function basicTypedElementsProvider(): array
+    public function basicTypedElementsProvider()
     {
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         return [
-            ['string', $faker->words(3, true)],
-            ['integer', $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX)],
-            ['double', $faker->randomFloat()],
-            ['number', $faker->randomElement([
-                $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX),
-                $faker->randomFloat(),
-                $faker->numerify('########'),
-                $faker->numerify('#####.###'),
-                $faker->numerify('-#####'),
-                $faker->numerify('-#####.##'),
-            ])],
+            ['any', null],
             ['array', $faker->words],
             ['boolean', $faker->boolean],
-            ['object', new stdClass()],
             ['callable', $faker->randomElement([
                 function() {},
                 function($a) {return $a;},
                 'strtolower',
                 [$this, __FUNCTION__],
             ])],
-            ['resource', fopen(__FILE__, 'r')],
+            ['class', \DateTime::class],
+            ['class', \DateTimeInterface::class],
+            ['double', $faker->randomFloat()],
+            ['integer', $faker->numberBetween(-2147483646)],
+            ['number', $faker->randomElement([
+                $faker->numberBetween(-2147483646),
+                $faker->randomFloat(),
+                $faker->numerify('########'),
+                $faker->numerify('#####.###'),
+                $faker->numerify('-#####'),
+                $faker->numerify('-#####.##'),
+            ])],
+            ['object', new stdClass()],
+            ['resource', fopen(__FILE__, 'rb')],
+            ['string', $faker->words(3, true)],
             [__CLASS__, $this],
-            [__CLASS__, new class extends TypedArrayAccessTraitTest {}],
+            [SomeTestClass::class, new SomeTestClassExtended()],
         ];
     }
 
@@ -53,9 +68,9 @@ class TypedArrayAccessTraitTest extends TestCase
      *
      * @return array
      */
-    public function mismatchedBasicTypedElementsProvider(): array
+    public function mismatchedBasicTypedElementsProvider()
     {
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         // Type => alias types
         $aliases = [
@@ -80,7 +95,7 @@ class TypedArrayAccessTraitTest extends TestCase
         $values = [
             'json' => '{ "key": "value" }',
             'number' => $faker->randomElement([
-                ['integer', $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX)],
+                ['integer', $faker->numberBetween(-2147483646)],
                 ['double', $faker->randomFloat()],
                 ['string_number', $faker->numerify('######')],
                 ['string_number', $faker->numerify('##.###')],
@@ -88,7 +103,7 @@ class TypedArrayAccessTraitTest extends TestCase
                 ['string_number', $faker->numerify('-##.##')],
             ]),
             'string' => $faker->words(3, true),
-            'integer' => $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX),
+            'integer' => $faker->numberBetween(-2147483646),
             'double' => $faker->randomFloat(),
             'boolean' => $faker->boolean,
             'array' => $faker->words,
@@ -108,7 +123,7 @@ class TypedArrayAccessTraitTest extends TestCase
                     $data_type = $value[0];
                     $value = $value[1];
                 }
-                if (!in_array($data_type, $aliases[$collection_type])) {
+                if (!in_array($data_type, $aliases[$collection_type], true)) {
                     $data[] = [$collection_type, $data_type, $value];
                 }
             }
@@ -120,29 +135,29 @@ class TypedArrayAccessTraitTest extends TestCase
     /**
      * Provides a list of matching type / sample value / value triplets
      *
-     * @return array
+     * @return array{string, mixed, mixed}
      */
-    public function sampleTypedElementsProvider(): array
+    public function sampleTypedElementsProvider()
     {
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         return [
-            ['string', $faker->words(3, true), $faker->words(3, true)],
-            ['string', '', $faker->words(3, true)],
-            ['integer', $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX), $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX)],
-            ['integer', 0, $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX)],
-            ['double', $faker->randomFloat(), $faker->randomFloat()],
-            ['double', 0.0, $faker->randomFloat()],
             ['array', $faker->words, $faker->words],
             ['array', [], $faker->words],
             ['boolean', true, $faker->boolean],
             ['boolean', false, $faker->boolean],
-            ['object', new stdClass(), new class extends stdClass {}],
-            ['object', $this, $this],
-            ['resource', fopen(__FILE__, 'r'), opendir(__DIR__)],
             ['callback', function() {}, function($a) {return $a;}],
             ['callback', function() {}, [$this, __FUNCTION__]],
             ['callback', function($a) {return $a;}, 'strtolower'],
+            ['double', $faker->randomFloat(), $faker->randomFloat()],
+            ['double', 0.0, $faker->randomFloat()],
+            ['integer', $faker->numberBetween(-2147483646), $faker->numberBetween(-2147483646)],
+            ['integer', 0, $faker->numberBetween(-2147483646)],
+            ['object', new SomeTestClass(), new SomeTestClassExtended()],
+            ['object', $this, $this],
+            ['resource', fopen(__FILE__, 'rb'), opendir(__DIR__)],
+            ['string', $faker->words(3, true), $faker->words(3, true)],
+            ['string', '', $faker->words(3, true)],
         ];
     }
 
@@ -151,34 +166,34 @@ class TypedArrayAccessTraitTest extends TestCase
      *
      * @return array
      */
-    public function mismatchedSampleTypedElementsProvider(): array
+    public function mismatchedSampleTypedElementsProvider()
     {
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         $samples = [
-            'string' => $faker->words(3, true),
-            'integer' => $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX),
-            'double' => $faker->randomFloat(),
             'array' => $faker->words,
             'boolean' => $faker->boolean,
-            'object' => new class extends stdClass {},
-            'resource' => fopen(__FILE__, 'r'),
             'callback' => function() {},
+            'double' => $faker->randomFloat(),
+            'integer' => $faker->numberBetween(-2147483646),
+            'object' => (object) [],
+            'resource' => fopen(__FILE__, 'rb'),
+            'string' => $faker->words(3, true),
         ];
 
         $values = [
-            'string' => $faker->words(3, true),
-            'integer' => $faker->numberBetween(PHP_INT_MIN, PHP_INT_MAX),
-            'double' => $faker->randomFloat(),
             'array' => $faker->words,
             'boolean' => $faker->boolean,
-            'object' => new class extends stdClass {},
-            'resource' => opendir(__DIR__),
             'callback' => $faker->randomElement([
                 ['object', function() {}],
                 ['array', [$this, __FUNCTION__]],
                 ['string', 'strtoupper'],
             ]),
+            'double' => $faker->randomFloat(),
+            'integer' => $faker->numberBetween(-2147483646),
+            'object' => (object) [],
+            'resource' => opendir(__DIR__),
+            'string' => $faker->words(3, true),
         ];
 
         $data = [];
@@ -206,9 +221,9 @@ class TypedArrayAccessTraitTest extends TestCase
      *
      * @return array
      */
-    public function validJSONEncodedValuesProvider(): array
+    public function validJSONEncodedValuesProvider()
     {
-        $faker = \Faker\Factory::create();
+        $faker = Factory::create();
 
         $object = new stdClass();
         $object->prop_1 = $faker->words;
@@ -232,11 +247,11 @@ class TypedArrayAccessTraitTest extends TestCase
      *
      * @return array
      */
-    public function invalidJSONEncodedValuesProvider(): array
+    public function invalidJSONEncodedValuesProvider()
     {
         return [
             ['unquoted text'],
-            ['{ "key": "<div class="coolCSS">some text</div>" }'],
+            ['{ "key": "<div style="color:black;">some text</div>" }'],
             ['{ key: \'value\' }'],
             ['{ key: ["value", .5, 
 	{ "test": 56, 
@@ -253,7 +268,7 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
      */
-    public function testValueIsValidForSameTypeCollection($type, $value): void
+    public function testValueShouldBeValidForSameTypeCollection($type, $value)
     {
         $collection = (new ArrayCollectionOf())->setElementType($type);
         $this->assertTrue($collection->isElementType($value));
@@ -266,7 +281,7 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::isElementType()
      */
-    public function testValueIsInvalidForMismatchedTypeCollection($type, $type_element, $value): void
+    public function testValueShouldNotBeValidForMismatchedTypeCollection($type, $type_element, $value)
     {
         $collection = (new ArrayCollectionOf())->setElementType($type);
         $this->assertFalse($collection->isElementType($value));
@@ -279,7 +294,34 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider basicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedArrayAccessTrait::offsetSet()
      */
-    public function testCanAddValueToSameTypeCollection($type, $value): void
+    public function testAddingValueToSameTypeCollectionShouldBePossible($type, $value)
+    {
+        $collection = (new ArrayCollectionOf())->setElementType($type);
+        $collection[] = $value;
+        $this->assertEquals($value, $collection[0]);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @dataProvider validJSONEncodedValuesProvider
+     * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
+     */
+    public function testAddingValidJSONToJSONCollectionShouldBePossible($value)
+    {
+        $collection = (new ArrayCollectionOf())->setElementType('json');
+        $collection[] = $value;
+        $this->assertEquals($value, $collection[0]);
+    }
+
+    /**
+     * @param string $type
+     * @param mixed $value
+     *
+     * @dataProvider basicTypedElementsProvider
+     * @covers \Abacus11\Collections\TypedArrayAccessTrait::offsetSet()
+     */
+    public function testSettingValueToSameTypeCollectionShouldBePossible($type, $value)
     {
         $collection = (new ArrayCollectionOf())->setElementType($type);
         $collection[0] = $value;
@@ -292,7 +334,7 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider validJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      */
-    public function testCanAddValidJSONToJSONCollection($value): void
+    public function testSettingValidJSONToJSONCollectionShouldBePossible($value)
     {
         $collection = (new ArrayCollectionOf())->setElementType('json');
         $collection[0] = $value;
@@ -305,11 +347,11 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider invalidJSONEncodedValuesProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      */
-    public function testCannotAddInvalidJSONToJSONCollection($value): void
+    public function testAddInvalidJSONToJSONCollectionShouldNotBePossible($value)
     {
         $collection = (new ArrayCollectionOf())->setElementType('json');
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentTypeException::class);
         $collection[] = $value;
     }
 
@@ -321,26 +363,26 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider mismatchedBasicTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      */
-    public function testCannotAddWrongBasicTypeToCollection($type_collection, $type_element, $element): void
+    public function testAddingWrongBasicTypeToCollectionShouldNotBePossible($type_collection, $type_element, $element)
     {
         $collection = (new ArrayCollectionOf())->setElementType($type_collection);
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentTypeException::class);
         $collection[] = $element;
     }
 
-    public function testCannotAddElementToNonTypedCollection(): void
+    public function testAddingElementToNonTypedCollectionShouldNotBePossible()
     {
         $collection = new ArrayCollectionOf();
 
-        $this->expectException(\Error::class);
+        $this->expectException(TypeNotSetException::class);
         $collection[] = true;
     }
 
     /**
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementType()
      */
-    public function testCannotChangeTheTypeOfTypedCollection(): void
+    public function testChangingTheTypeOfTypedCollectionShouldNotBePossible()
     {
         $collection = new ArrayCollectionOf();
         $collection->setElementType('string');
@@ -352,7 +394,7 @@ class TypedArrayAccessTraitTest extends TestCase
     /**
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
      */
-    public function testCannotUseNullAsSampleType(): void
+    public function testUsingNullAsSampleTypeShouldNotBePossible()
     {
         $this->expectException(\InvalidArgumentException::class);
         (new ArrayCollectionOf())->setElementTypeLike(null);
@@ -366,7 +408,7 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider sampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
      */
-    public function testCanAddValidValueToLikeElementTypeCollection($type, $sample, $value): void
+    public function testAddingValidValueToLikeElementTypeCollectionShouldBePossible($type, $sample, $value)
     {
         $collection = (new ArrayCollectionOf())->setElementTypeLike($sample);
         $collection[0] = $value;
@@ -382,11 +424,11 @@ class TypedArrayAccessTraitTest extends TestCase
      * @dataProvider mismatchedSampleTypedElementsProvider
      * @covers \Abacus11\Collections\TypedCollectionTrait::setElementTypeLike()
      */
-    public function testCannotAddInvalidValueToLikeElementTypeCollection($sample_type, $sample, $value_type, $value): void
+    public function testAddingInvalidValueToLikeElementTypeCollectionShouldNotBePossible($sample_type, $sample, $value_type, $value)
     {
         $collection = (new ArrayCollectionOf())->setElementTypeLike($sample);
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentTypeException::class);
         $collection[0] = $value;
     }
 }

@@ -2,33 +2,37 @@
 
 namespace Abacus11\Collections;
 
+use Abacus11\Collections\Exception\CannotChangeTypeException;
+use Abacus11\Collections\Exception\InvalidSampleException;
+use Abacus11\Collections\Exception\InvalidTypeDefinitionException;
+use Abacus11\Collections\Exception\TypeNotSetException;
+
 /**
  * Trait to implement the TypedCollection interface
- *
- * @author Philippe Jausions <Philippe.Jausions@11abacus.com>
- * @see \Doctrine\Common\Collections\Collection
  */
 trait TypedCollectionTrait
 {
     /**
      * @var \Closure
      */
-    private $element_type_checker;
+    private $element_type_checker = null;
 
     /**
-     * Returns if the argument is of the collection's type
+     * Returns whether the argument is of the collection's type
      *
      * @param mixed $element Value to check
      *
      * @return boolean
      *
-     * @throws \AssertionError when the criteria is not set
+     * @throws TypeNotSetException
      */
     public function isElementType($element)
     {
-        // You may receive the Error: "Function name must be a string"
-        // if the collection type wasn't set before trying to add elements.
-        return ($this->element_type_checker)($element);
+        if (!$this->isElementTypeSet()) {
+            throw new TypeNotSetException("The collection's element type is not set.");
+        }
+
+        return call_user_func($this->element_type_checker, $element);
     }
 
     /**
@@ -42,100 +46,91 @@ trait TypedCollectionTrait
     }
 
     /**
-     * Defines the criteria for adding elements to the collection
+     * @inheritDoc
      *
-     * If a closure is passed, it needs to expect one argument and must
-     * return TRUE or FALSE, for valid and invalid values respectively.
-     *
-     * If a string is passed, it can either be a fully qualified class name
-     * or one of the following:
-     * <ul>
-     *  <li>array</li>
-     *  <li>boolean</li>
-     *  <li>callable</li>
-     *  <li>double</li>
-     *  <li>integer</li>
-     *  <li>number</li>
-     *  <li>json</li>
-     *  <li>object</li>
-     *  <li>resource</li>
-     *  <li>string</li>
-     * </ul>
-     *
-     * @param string|\Closure $criteria
-     *
-     * @return $this
-     *
-     * @throws \TypeError
-     * @throws \RuntimeException
-     *
-     * @see TypedCollection::setElementTypeLike()
+     * @throws CannotChangeTypeException
+     * @throws InvalidTypeDefinitionException
      */
-    public function setElementType($criteria)
+    public function setElementType($criterion)
     {
         if ($this->isElementTypeSet()) {
-            throw new \RuntimeException('The criteria for the collection cannot be changed');
+            throw new CannotChangeTypeException('The criterion for the collection cannot be changed');
         }
 
-        if (is_string($criteria)) {
+        if (is_string($criterion)) {
             // We are a bit more tolerant with aliases
-            switch (strtolower($criteria)) {
-                case 'string':
-                case 'text':
-                    $this->element_type_checker = 'is_string';
+            switch (strtolower($criterion)) {
+                case self::OF_ANYTHING:
+                case 'anything':
+                case '*':
+                    $this->element_type_checker = static function($element) {
+                        return true;
+                    };
                     break;
-                case 'double':
-                case 'float':
-                    $this->element_type_checker = 'is_float';
-                    break;
-                case 'array':
+                case self::OF_ARRAYS:
                     $this->element_type_checker = 'is_array';
                     break;
-                case 'resource':
-                case 'resource (closed)':
-                    $this->element_type_checker = 'is_resource';
+                case 'bool':
+                case self::OF_BOOLEANS:
+                    $this->element_type_checker = 'is_bool';
                     break;
-                case 'integer':
-                case 'int':
-                    $this->element_type_checker = 'is_int';
-                    break;
-                case 'number':
-                    $this->element_type_checker = 'is_numeric';
-                    break;
-                case 'object':
-                    $this->element_type_checker = 'is_object';
-                    break;
-                case 'callable':
-                case 'closure':
+                case self::OF_CALLABLES:
                 case 'callback':
+                case 'closure':
+                case 'fn':
                 case 'function':
                     $this->element_type_checker = 'is_callable';
                     break;
-                case 'boolean':
-                case 'bool':
-                    $this->element_type_checker = 'is_bool';
+                case self::OF_CLASSES_AND_INTERFACES:
+                    $this->element_type_checker = static function($element) {
+                        return is_string($element)
+                            && (class_exists($element) || interface_exists($element));
+                    };
                     break;
-                case 'json':
-                    $this->element_type_checker = function($element) {
+                case self::OF_DOUBLES:
+                case 'float':
+                    $this->element_type_checker = 'is_float';
+                    break;
+                case 'int':
+                case self::OF_INTEGERS:
+                    $this->element_type_checker = 'is_int';
+                    break;
+                case self::OF_JSON_STRINGS:
+                    $this->element_type_checker = static function($element) {
                         if (!is_string($element)) {
                             return false;
                         }
-                        if (strcasecmp($element, 'null') == 0) {
+                        if (strcasecmp($element, 'null') === 0) {
                             return true;
                         }
-                        return (json_decode($element) !== null);
+                        $decoded = json_decode($element);
+                        return null !== $decoded || json_last_error() === JSON_ERROR_NONE;
                     };
+                    break;
+                case self::OF_NUMBERS:
+                    $this->element_type_checker = 'is_numeric';
+                    break;
+                case self::OF_OBJECTS:
+                    $this->element_type_checker = 'is_object';
+                    break;
+                case self::OF_PHP_RESOURCES:
+                case 'resource (closed)':
+                    $this->element_type_checker = 'is_resource';
+                    break;
+                case self::OF_STRINGS:
+                case 'text':
+                    $this->element_type_checker = 'is_string';
                     break;
                 default:
                     // Class name
-                    $this->element_type_checker = function($element) use ($criteria) {
-                        return ($element instanceof $criteria);
+                    $this->element_type_checker = static function($element) use ($criterion) {
+                        return ($element instanceof $criterion);
                     };
             }
-        } elseif (is_callable($criteria)) {
-            $this->element_type_checker = $criteria;
+        } elseif (is_callable($criterion)) {
+            $this->element_type_checker = $criterion;
         } else {
-            throw new \TypeError('Invalid criteria to check elements of the collection.');
+            throw new InvalidTypeDefinitionException('Invalid criterion to check elements of the collection.');
         }
         return $this;
     }
@@ -149,17 +144,16 @@ trait TypedCollectionTrait
      *
      * @return $this
      *
-     * @throws \TypeError
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws InvalidSampleException
      *
      * @see TypedCollection::setElementType()
      */
     public function setElementTypeLike($sample)
     {
         if ($sample === null) {
-            throw new \InvalidArgumentException('Sample element cannot be NULL');
-        } elseif (is_object($sample)) {
+            throw new InvalidSampleException('Sample element cannot be NULL');
+        }
+        if (is_object($sample)) {
             return $this->setElementType(get_class($sample));
         }
         return $this->setElementType(gettype($sample));

@@ -2,11 +2,13 @@
 
 namespace Abacus11\Collections;
 
+use Abacus11\Collections\Exception\InvalidArgumentTypeException;
+use Abacus11\Collections\Exception\TypeNotSetException;
+
 /**
  * Trait to implement constraints on elements of an ArrayAccess interface
  * implementation.
  *
- * @author Philippe Jausions <Philippe.Jausions@11abacus.com>
  * @see \ArrayAccess
  */
 trait TypedArrayAccessTrait
@@ -14,7 +16,7 @@ trait TypedArrayAccessTrait
     use TypedCollectionTrait;
 
     /**
-     * @var mixed[]
+     * @var array
      */
     protected $elements = [];
 
@@ -26,14 +28,20 @@ trait TypedArrayAccessTrait
      *
      * @return void
      *
-     * @throws \TypeError when the value does not match the criteria
-     * @throws \AssertionError when the criteria is not set
+     * @throws InvalidArgumentTypeException when the value does not match the criterion of the collection
+     * @throws TypeNotSetException when the criterion of the collection is not set
      */
     public function offsetSet($offset, $value)
     {
         if (!$this->isElementType($value)) {
-            throw new \TypeError('The value does not comply with the criteria for the collection.');
+            throw new InvalidArgumentTypeException('The value does not comply with the criterion for the collection.');
         }
+        // Support appending to an array (in that case $offset is null)
+        if (null === $offset) {
+            $this->elements[] = $value;
+            return;
+        }
+
         $this->elements[$offset] = $value;
     }
 
